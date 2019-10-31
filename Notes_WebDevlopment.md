@@ -1,9 +1,7 @@
-# Layout
-Web Design Layout
 
-This project is about Learning Layout Techniques. Such as Foat, Table , CSS Grid, Flexbox, Bootstrap, Material CSS.
-
-I am taking some Udemy Courses, Web Dev BootCamp. So this project also contains the Demo Projects 
+************************************************
+				General Web Design
+************************************************
 
 ***********************************************************
 Things to Remember

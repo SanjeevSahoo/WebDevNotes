@@ -1,5 +1,8 @@
-# LearnAngular
-Learning from Udemy
+
+************************************************
+				Notes on Angular8
+************************************************
+
 
 1. Installation
     

@@ -1,5 +1,8 @@
-# LearnReact
-Files for Learning React
+
+************************************************
+				Notes on React	
+************************************************
+
 
 1. ES6+ Features
 	
