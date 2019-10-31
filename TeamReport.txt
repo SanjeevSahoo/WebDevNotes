@@ -1,0 +1,68 @@
+Improvement Scope
+*******************
+
+// USERS
+
+
+1.  All User base are not communicated about Changes being Deployed in system before and after deployement. 
+
+    [BENIFITS: Doing this will help user to be  well aware of any changes, its impact, usage, benifit or why the change is happening, etc]
+
+2.  No Mechanism available where user can check about all the Upcoming changes (changes which are curently under development/ ready for deployment) and their Development/ Deployment Timeline. 
+
+    [BENIFITS: Addition to the first point , this would also empower user to give any suggestion for any change well in advance, which can in turn help improve the system]
+    
+3.  Not taking user feedback/suggestion for any change post deployed / for any feature request in the system as a whole. Feedback not only of the process owners but even the individual users.
+
+    [BENIFITS: Help Identify any specific UI/UX issues, any New feature/ Improvement, unknown Bug etc. With these feedback in mind we can create better more user friendly systems.]
+
+4.  Acknowledging each individual feedbacks/suggestions even criticism if any from the user, via proper mail communication and update about its status, encouraging user for more such feedbacks.
+
+    [BENIFITS: Addition to point no 3, this would create immpresion among users that their suggestions are herd and acted upon.]
+
+5.  Currently CR is given for different modules from different committees. Each committee expects their requirement independend of each other, at times requirement may impact/depend on other modules. When there are multiple requirements parallely across module it becomes difficult to give PDC correctly for all request which leads to delivery time gets impacted and dissatisfaction amount users. Hence there is a need for coordinating these changes centrly by the SHE committee.
+
+No CR Mangement flow defined and implemented for approval process/tracking, though same has been discussed multiple times. Whatever process followed is defined by User end process or individually by the developer. No agreed upon process defined and communicated to all stakeholders for system.
+
+    [BENIFITS: All stakeholders will be well aware about all changes and not only theirs but others also. Impacting/Depended changes are known. Reaslistic PDC could be given, CR can be priotized by central SHE team.]
+
+6.  No System in place for Change Request Management (CR)
+
+    [BENIFITS: This will actually solve the point no 2 to greater extent, and help implement point no 5]
+
+
+//  PLANNING
+
+
+
+
+//  DOCUMENTATION
+
+
+1.  BRD and SRS are not Created for all CR.
+
+2.  No Technical Documentation for Program is available.
+
+3.  User Manuals are either not Created or not updated after changes are done.
+
+4.  Code Vaulting is not happening for all projects.
+
+5.  No Uniform coding guidelines/standard available in the team.
+
+6.  UI created in same project are not not Uniform in look and feel across screens.
+
+
+//  TESTING & DEPLOYMENT
+
+
+1.  No Scheduled Deployement. Deployments are happening on need basis.
+
+2.  Testing is not done for all deployements being done.
+
+3.  No System in place for automated Testing.
+
+4.  Manual Testing is not rigourosuly done.
+
+
+// SHARING
+
