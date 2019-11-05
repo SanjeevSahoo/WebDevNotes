@@ -291,14 +291,26 @@ snake_Case -	similar to camelCase but the word seperator is _.
 
 var , let & const are all used to declare a variable
 
-let		-	In same scope cannot be redeclared.
-			It has block level scope.
+var		-	has either a global scope or function scope
+
+let		-	In same scope cannot be redeclared. variable in child scope can have the same name which is then shadowed.
+			It has block level scope. means variable declared in {} is available within that code block.
 
 const	-	In same scope cannot be redeclared.
 			It cannot be reinitialized.
 			In case of an array/object the child elements can be added, deleted or updated.
 
 While declaring constant, The Variable names should be in uppercase. It is rather a reccomendation than a need. constant name can be any valid variable named seen earlier.
+
+Shadow variable / variable shadowing is when the local scope has variable with same name as in the parent scope. In such case the local scoped variables shadows the parent scoped varaible and only the local scoped variable is used.
+
+Hoisting happens for variable/object, where they are hoisted to the the top of the code block. 
+
+	In case of var the value is hoisted and initialized with undefined.
+
+	In case of let/const the value is hoisted but not initialized. hence variable declared with let/const cannot be accessed before declaration.
+
+	In case of functions they are hoisted and initialized with the function body.
 
 --------------------------------------------------------------------------------------
  Truthy and Falsy Values
@@ -651,3 +663,116 @@ Statements that perform actions that doesnot immediately produce result is a sta
 like a if else statment. rather it consoles undefined.
 
 	if(true){console.log(23);}
+
+--------------------------------------------------------------------------------------
+ Loops
+--------------------------------------------------------------------------------------
+
+There are below loops:
+
+for loop		-	Used with counter variable to run a fixed number of time.
+for-of loop		-	Used with Arrays to loop through all array elements.
+for-in loop		-	Used with Objects to loop through key value pair.
+while loop		-	runs based on loop condition , loops runs until the loop condition is true. 
+do while loop	-	runs atleast once, the loop condition is checked at the end.
+
+break;		-	It stops a loop, steps out of the loop and process next line;
+
+	const arrData = [1,2,3,4,5];
+	for(let i=0;i<arrData.length;i++){
+		if(arrData[i]>3){
+			break;
+		}
+		console.log(arrData[i]);
+	}
+
+the above code will break once the item value is greater than 3.
+
+continue;	-	It is used when there is need to skip somepart of code for some specfic index of a loop.
+
+	const arrData = [1,2,3,4,5];
+	for(let i=0;i<arrData.length;i++){
+		if(arrData[i] === 3){
+			continue;
+		}
+		console.log(arrData[i]);
+	}
+
+the above code will skip the item where value is 3, it will continue any next iteration.
+
+
+Labeled Statement -	It helps break the parent loop from child look.
+
+--------------------------------------------------------------------------------------
+ Try, Catch, Finally and Throw
+--------------------------------------------------------------------------------------
+
+we can throw a custom error using throw.
+
+	const inputValue = '23443sdfs';
+	const parsedInput = parseInt(inputValue);
+
+	if(!parsedInput){
+		throw {message:'Input is invalid.'};
+	}
+
+we can use try catch and finally to capture any error and handle it to show better error message. and avoid code to stop execution abruptly.
+
+	function getValue() {
+		const inputValue = '23443sdfs';
+		const parsedInput = parseInt(inputValue);
+
+		if(!parsedInput){
+			throw {message:'Input is invalid.'};
+		}
+
+		return parsedInput;
+	}
+
+	const getValueData = 0;
+
+	try {
+		getValueData = getValue();
+	}
+	catch(error){
+		console.log(error);
+		getValueData = 100;
+	}
+
+the above code will log an error message, the custom error message passed, and then set the value as default 100.
+
+	try {
+		getValueData = getValue();
+	}
+	catch(error){
+		console.log(error);
+		getValueData = 100;
+	}
+	finally {
+		console.log('calculated user input and parsed it.');
+	}
+
+the finally block is executed no matter if error occured or not.
+
+--------------------------------------------------------------------------------------
+ Strict Mode
+--------------------------------------------------------------------------------------
+
+use with a string "use strict"; at the top of the code. 
+
+	put this at the top of function to enable strict mode for that function.
+
+	put at the top of script to enable strict mode for all the code in that script at once.
+
+	javascript modules are in strict mode by default.
+
+With strict mode variable must be declared with either a var, let or const keyword.
+
+	userName = 'sanjeev';	// this will give an error not defined.
+
+Varibale cannot be redclared in case var is used. let/const already restrict this in normal mode.
+
+	var userName = 'sanjeev';
+	var userName = 'rohit';		// this will give an error. reclared variable.
+
+
