@@ -775,4 +775,152 @@ Varibale cannot be redclared in case var is used. let/const already restrict thi
 	var userName = 'sanjeev';
 	var userName = 'rohit';		// this will give an error. reclared variable.
 
+--------------------------------------------------------------------------------------
+ Primitive vs Reference Types
+--------------------------------------------------------------------------------------
+
+There are the below primitive data in javascript
+
+	String, Number, Boolean, null, undefined, Symbol
+
+The value for primitive data is copied/passed by value. 
+
+	let name = 'sanjeev';
+	let newName = name;
+
+	name = 'Rohit';
+	console.log(name);			// this will output Rohit
+	console.log(newName);		// this will output   sanjeev
+
+As we can see in the above example thats intuitive that both have different value.
+
+The object and arrays are the reference types.
+
+In reference type the values are copied/passed by reference. when we create an array/object the value is actually created in the heap and the variable actually holds the pointer to memory address. and hence when we copy/pass the variable, the address is actually copied/passed.
+
+	let arrData = [1,3,4,5];
+	let newArray = arrData;
+
+	arrData.push(2);
+	console.log(arrData);		// this output [1,3,4,5,2]
+	console.log(newArray);		// this output [1,3,4,5,2]
+
+So in the above case both array value changes as both are pointing to the same memory address.
+
+This also helps explain the below use cases where both variable with same object/array value created with different variable name doesnot match.
+
+1. Comparision of arrays/objects
+
+	let var1 = [1,2,3];
+	let var2 = [1,2,3];
+
+	console.log(var1===var2); 	// this output false
+	console.log(var1==var2);	// this output false
+
+	The above code returns false as both the variable actually holds the different memory address and hence are different.
+
+2. Why constant allow additon/deletion of elements in object/arrays but doesnot allow reinitialization.
+
+	const arrData = [1,2,3];
+	arrData.push(4);
+
+	console.log(arrData);	// this will output [1,2,3,4]
+
+	arrData = [1,4,5,3];	// this will give a reinitialization error message.
+
+	So why the push operation was successfull , because we changed the value in the heap an didn't actually change the value stored in constant.
+
+	In case of assignining a new value, we are actually changing the meomory address stored in the constant , which is invalid.
+
+--------------------------------------------------------------------------------------
+ Garbage Collection
+--------------------------------------------------------------------------------------
+
+Javascript engine have a garbarge collector which periodically checks for memory heap, if it find any unused object (without any reference to it), it then removes any unused object.
+
+	let arrData = [1,2,3];
+	arrData = null;
+
+When we set the above array to null, the memory location containing the value [1,2,3] is now not referenced by any variable, this is the candidate for garbage collector and will be removed by javascript engine in its periodic review of the memoery heap.
+
+One use case where memory leaks are created is the usage of anonymous function binding to an event listener. such eventlistner bind same function multiple times in case the addEvenListener is called multiple times. Garbage collector in such case cannot detect it to be removed.
+
+garbage collector not only looks for derefrenced objects but also for those objects which are no longer used even if not derefrenced explicitly.
+
+--------------------------------------------------------------------------------------
+ Functions
+--------------------------------------------------------------------------------------
+
+Functions are objects.
+
+Fuctions inside an object is called a method.
+
+When Anonymous functions is used in event binding it should be bind once, binding an anonymous functions multiple times create memory leaks.
+
+Anonymous functions can be given a name, this can be useful in debuging.
+
+--------------------------------------------------------------------------------------
+ Arrow Function
+--------------------------------------------------------------------------------------
+
+An arrow function has => sign as below 
+
+	const add = (a,b) => {
+		return a + b;
+	}
+
+In case it only has a single expression it can be written as below
+
+	const add = (a,b) => a + b;
+
+In case it only has 1 argument then
+
+	const add = a => a + 2;
+
+In case of no argument is passed then
+
+	const add = () => 1 + 2;
+
+--------------------------------------------------------------------------------------
+ Function Parameters and Arguments
+--------------------------------------------------------------------------------------
+
+Default parameters
+
+	const add = (a,b=2) => a + b;
+	console.log(add(1));	// this will output 3, though we only pass one argument b uses the default value of 2
+
+Rest Operator in function Arguments
+
+	const add = (...numbers) => {
+		let retval = 0;
+		for(const num of numbers){
+			retval  += num;
+		}
+		return retval;
+	}
+
+	console.log(add(1,3,3,4));			// log 11
+	console.log(add(1,3,3,4,5,5));		// log 21
+
+so with this we can pass n numbers of parameters and can then access with rest operator.
+
+Rest operator can be used with other parameters
+
+	const add = (a,b, ...numbers) => {// function body};
+	
+Argument keyword in function Arguments
+
+	const add = function(){
+		let retval = 0;
+		for(const num of arguments){
+			retval  += num;
+		}
+		return retval;
+	}
+
+	console.log(add(1,3,3,4));			// log 11
+	console.log(add(1,3,3,4,5,5));		// log 21
+
+before the introduction of rest operator in ES6, arguments was the method to handle such usecase. now the rest operator is the recomended way to do the same.
 
