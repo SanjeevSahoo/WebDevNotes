@@ -860,7 +860,7 @@ When Anonymous functions is used in event binding it should be bind once, bindin
 Anonymous functions can be given a name, this can be useful in debuging.
 
 --------------------------------------------------------------------------------------
- Arrow Function
+ Functions - Arrow Function
 --------------------------------------------------------------------------------------
 
 An arrow function has => sign as below 
@@ -882,7 +882,7 @@ In case of no argument is passed then
 	const add = () => 1 + 2;
 
 --------------------------------------------------------------------------------------
- Function Parameters and Arguments
+ Functions - Parameters and Arguments
 --------------------------------------------------------------------------------------
 
 Default parameters
@@ -924,3 +924,16 @@ Argument keyword in function Arguments
 
 before the introduction of rest operator in ES6, arguments was the method to handle such usecase. now the rest operator is the recomended way to do the same.
 
+--------------------------------------------------------------------------------------
+ Functions - Callback Function
+--------------------------------------------------------------------------------------
+
+We can actually pass function as an argument to other function, we have being unknowngly doing this while adding the event using the addEventListner
+
+	someButtonControl.addEventListner('click',doAction);
+
+In in the above code the doAction is the callback function.
+
+--------------------------------------------------------------------------------------
+ Functions - Using bind() 
+--------------------------------------------------------------------------------------
