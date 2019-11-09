@@ -937,3 +937,140 @@ In in the above code the doAction is the callback function.
 --------------------------------------------------------------------------------------
  Functions - Using bind() 
 --------------------------------------------------------------------------------------
+
+Since functions are also objects so they also have various methods. bind() is one such method that is used to prepare a function.
+
+bind() helps pass argument / rather say bind an argument while attaching it as callback function/simply passing it as an argument to other function to be invoked afterwards.
+
+	const computeData = (operation, a, b, alertFunction)=> {
+		let val = 0;
+		if(operation ==='ADD'){
+			val = a + b;
+		}
+		else if(operation === 'SUBS'){
+			val = a - b;
+		}
+		alertFunction(val);
+	}
+
+	function alertFunc(message, val){
+		console.log(message + ', computed data : '+ val);
+	}
+	
+	computeData('ADD', 1,2 ,alertFunc.bind(this,'Addition Operation'));			// Addition Operation 3
+	computeData('SUBS', 3,2 ,alertFunc.bind(this,'Substraction Operation'));		// Substraction Operation 1
+
+The above example alertFunc is passed with a bind message.
+Note the order of bind parameter, it must be first.
+
+--------------------------------------------------------------------------------------
+ WHATWG - Group that Standardizes Browser API's
+--------------------------------------------------------------------------------------
+
+https://whatwg.org/
+
+--------------------------------------------------------------------------------------
+ DOM API
+--------------------------------------------------------------------------------------
+
+DOM stands for Document Object model. 
+
+JavaScript is a "hosted language". The browser as host environment exposes this DOM API to your JS code automatically.
+
+When the browser parsed the HTML document, it forms a tree structure containing the object representation of all the HTML Tags.
+
+D	-	Document, sicne it is representation of the HTML Document
+O	-	Oject, since the elements are represented as object.
+M	-	Model, the way the objects are arranged , the structure of the object, which is a tree structure.
+
+DOM is the browsers internal programmatic representation of the web page. This representation can be manipulated by javascript.
+
+DOM API is the way browsers allows javascript code to manipulate this DOM at runtime. So this way the actually page on the server doesnot change but the parsed structure in the browser can be changed.
+
+document object which is the top most node, also called the root node, all other nodes comes under this.
+
+window object represents the window that contains the document, for each tab in a browser a new window object is created.
+
+all properties and methods under window object can directly accessed in the code, so instead of window.document.querySelector we can simply write document.querySelector.
+
+--------------------------------------------------------------------------------------
+ DOM API - Element vs Node
+--------------------------------------------------------------------------------------
+
+All objects inside a DOM is a node. there are various kind of nodes (element node, document node, text node etc.)
+
+So, Element node is a type of node that represents the HTML tag, It has properties such as id and class.
+
+document.getElementById() returns a single HTML element, hence it an element node.
+
+docment.getElementByClassName() can return muliple object, hence it returns NodeList (prior to HTML5) with HTML5 now it returns HTMLCollection.
+
+--------------------------------------------------------------------------------------
+ DOM API - querySelectorAll is non-live 
+--------------------------------------------------------------------------------------
+
+	document.getElementsByClassName()
+	document.getElementsByTagName()
+	document.getElementsByName()
+
+The above methods are used to query the document, the result returned are in sync with the DOM and hence called live collection, in case new nodes are added the same would be available in the HTMLElementCollection list already queried.
+
+	document.querySelectorAll()
+
+The document.querySelectorAll() is a non live list, this is an snapshot of the collection at the time the query executed. This is because the querySelector can be used to selector very complex css selector. now to keep track of all the changes and updating will have performance issue. because it will have to be reevaluated periodically.
+
+	document.querySelectorAll() returns as NodeList
+
+	document.getElementsByClassName() returns a HTMLCollection
+
+NodeList is are mostly non live list, HTMLCollection is mostly live list. there are exceptions also
+NodeList contains all nodes, Element, Text , comment etc. while HTMLCollection only hold element nodes.
+
+--------------------------------------------------------------------------------------
+ DOM API - property vs attribute
+--------------------------------------------------------------------------------------
+
+We define attrubute in out html document, when the same is parsed to created the DOM element node, the attributes are converted to the corresponding properties and can be accessed as the part the element node property. 
+
+The property name can be same / different from attribute name.
+
+like background-color is an attribute and backgroundColor is the property.
+
+For a given DOM node object, properties are the properties of that object, and attributes are the elements of the attributes property of that object.
+
+--------------------------------------------------------------------------------------
+ DOM API - Traversing DOM
+--------------------------------------------------------------------------------------
+
+Child 			- Direct Children
+Decsendents		- Children/ Children of Children
+Parent			- Direct Parent
+Ancestors		- Parent/ Parent of Parent
+
+Parent Selectors
+
+	parentNode		- Selects direct parent Node
+	parentElement	- Selects direct the parent Node if its also an element node else returns null
+	closest			- Selects the parent element based on the css selector
+
+Child Selectors
+
+	childNodes			- Selects all direct child nodes
+	children			- Selects all direct child elements. only availble if the current object is an element
+	querySelector		- This can also be used to find children. instead of document.querySelector we can use it with the item 	itself.
+	firstChild			- first child node
+	firstElementChild	- first child element 
+	lastChild			- last child node
+	lastElementChild	- last child element
+
+Sibling Selectors
+
+	previousSibling			- previous sibling same parent node
+	previousElementSibling	- previous sibling same parent Element
+	nextSibling				- next sibling same parent node
+	nextElementSibling		- next sibling same parent element
+
+	
+
+
+
