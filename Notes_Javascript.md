@@ -286,6 +286,27 @@ snake_Case -	similar to camelCase but the word seperator is _.
 	console.log(firstName + ' is a '+ job + ' and is he married?'+ isMarried);
 
 --------------------------------------------------------------------------------------
+ Template Literals
+--------------------------------------------------------------------------------------
+
+Back-ticks(`) can be used instead of Single Quotes(') or Double Quotes(") for string containation as below
+
+	let name = 'Sanjeev'
+	let age = 29;
+	let someValue = 'My Name is ' + name + " and my age is " + age;
+
+same can written with back-ticks, the advantage is it can be written with newline (output will appear with newline)
+
+	let someValue = `My Name is 
+		`+name+` and my age is ` + age;
+
+using Template Literals. its even more easier.
+
+	let someValue = `My Name is ${name} and my age is ${age}`;
+
+\n is used to put linebreaks. where (\) is called a escape character.
+
+--------------------------------------------------------------------------------------
  var, let & const
 --------------------------------------------------------------------------------------
 
@@ -388,12 +409,103 @@ Array with different datatype
 
 Find element in an array
 
-	console.log(john.indexOf('blue'));  // indexOf finds the element in the array
+	console.log(john.indexOf('blue'));  // indexOf finds the element in the array	
+
+	it returns -1 if not found an > -1 if found
+
+We can also used includes() which returns a true if found and false it not found. This works on primitive values only
 
 if found it returns the index of the first occurence of the element else it returns the value as -1
 
 	var isDesigner = john.indexOf('designer') === -1? 'Not a Desinger':'Is a Designer';
 	console.log('John '+ isDesigner);
+
+in case of array with multiple objects , like [{name:'Sanjeev'},{name:'Rohan'}] we cannot use indexOf but find()
+
+	const persons = [{name:'Sanjeev'},{name:'Rohan'}];
+	const currPerson = persons.find(person=>person.name==='Sanjeev');
+	console.log(currPerson);		// this would log {name:"Sanjeev"}
+
+in case of array index is required for a given value
+
+	const currPersonIndex = persons.findIndex(person=>person.name==='Sanjeev');
+	console.log(currPersonIndex);		// this would log index of {name:"Sanjeev"} that is 0
+
+push() and pop() has better performance then unshift() and shift()
+
+splice()	- takes 3 parameters, start Index, the no of items to delete or replace and the actual item or items to replace.
+
+	someArray.splice(0)					- deletes all items from array.
+	someArray.splice(1,0,'new item')	- adds new item after index 1
+	someArray.splice(1,1, 'new item')	- replaces the item at index 1
+	someArray.splice(0,1)	 `			- deletes 1 item from index 1.
+	someArray.spliace(-2,1)				- deletes 1 item starting backwards, 2 last element.
+
+slice()		- takes 2 arguments from Index to to index. returns a slice of the array.
+
+	someArray.slice(0,3)				- returns items from 0 to 3, it actually returns a copy of array and not a refrence.
+	someArray.slice(-3,-1)				- returns from 3rd last item to the last item.
+
+concat()	- returns an array contains items from first array and the passwed arrays.
+
+map()		- runs a loop for each item , we can then do some operation on each item .
+
+sort()		- sorts an array by comparing them as string, its ascending order. it also takes a sorting function 
+
+	const arrData = [2,335,35,5,3,4,344];
+	const sortedData = arrData.sort((a,b)=>{
+		if(a>b){
+			return 1;
+		}
+		else if(a===b){
+			return 0;
+		}
+		else {
+			return -1;
+		}
+	});
+	console.log(sortedData);	// this will log (7) [344, 335, 35, 5, 4, 3, 2]
+
+reverse()	- sorted arrays can be ordered in descending order using this function
+
+filter()	- filter functions takes a filter function and returns any filtered data
+
+	const filteredData = arrData.filter(item=>item>6);
+	console.log(filteredData);		// this will log (3) [344, 335, 35]
+
+reduce()	- it takes 2 arguments, one reducer function and the inital value.
+
+	const sum = filteredData.reduce((prevValue, currValue)=> prevValue + currValue,0);
+	console.log(sum);			// this logs 714
+
+split()		- it splits a string in array 
+
+	const commaSeperatedString = 'This, is , the string, for, comma';
+	console.log(commaSeperatedString.split(','));		// (5) ["This", " is ", " the string", " for", " comma"]
+
+join()		- it joins a array in string seperated by , by default.
+
+	const arrData = ['this','is','value'];
+	console.log(arrData.join());	// this,is,value
+	console.log(arrData.join(' '));	// this is value
+
+...			- Spread operator can be used to actually spread and array / object.
+
+	const arrData = [{name:'sanjeev',age:31},{name:'rohan',age:33}];
+	const copiedArray = [...arrData];	// this copies the actual refrence so, changing the array length has no effect but changing the referenced items value will affect both original and copied array. copying via slice() is better 
+
+[item1, item2]	- array destructuring is when array items are destructured to extract individual items.
+
+	const arrStrings = ['sanjeev','sahoo',32,'Designer'];
+	const [startName, lastName, age, job] = arrStrings;
+	console.log(startName);			// logs 'sanjeev
+
+...			- Rest operator is same as spread, the type depends on how we use it.
+
+	const arrStrings = ['sanjeev','sahoo',32,'Designer'];
+	const [startName, lastName, ...othersValues] = arrStrings;
+
+	here the ... works as the rest operator as it takes all other items and stores it in othersValues.
 
 --------------------------------------------------------------------------------------
  Arrays Key things to Note
@@ -443,6 +555,27 @@ Now if they are copied as below and then compared will return true.
 	console.log(arr1 === arr2);  // this return true
 	console.log(arr1 == arr2);	// this also returns true
 
+When creating array with Array() constructor, the below to be noted
+
+	const someArray = new Array(1,5);
+	console.log(someArray);		// logs (2)[1,5]
+
+	const againArray = new Array(5);
+	console.log(againArray); 	// logs (5)[empty x 5]
+
+so in case a single argument is passed then creates the number of empty items in the array.
+
+some other methods to create arrays
+
+	const numbers = new Array.of(1,2);
+
+	const splitString = Array.from('Sanjeev');
+	console.log(splitString);			// ['S','a','n','j','e','e','v']
+
+Array.from() takes a iterable object and converts it into an array. 
+
+array functions can also being changed after each other.
+
 --------------------------------------------------------------------------------------
  Objects and Properties
 --------------------------------------------------------------------------------------
@@ -476,6 +609,15 @@ new Object syntax
 
 	console.log(john);
 
+delete john.age;		// this removes the property from an object
+
+john['new value'] = 'sdf'	// this is posiible to have key with space using the square bracket notation
+
+john[1.5] = 'hello'		// key can be number also
+
+const newkey = 'somekey';
+john[newkey] = 'data';	// newkey is a variable
+
 --------------------------------------------------------------------------------------
  Objects and Methods
 --------------------------------------------------------------------------------------
@@ -496,26 +638,164 @@ new Object syntax
 
 this is a special keyword, that resembles current object
 
+Object.assign() can be used to copy an object to new object. it can also be used to merge objects
+
+	const person = {name:'sanjeev',age:30};
+	const newPerson = Object.assign({},person);
+
+Object Destructuring is little different from array destructuring as the order is not guranteed in Objects. so while in array destructuring we can use an custom name of destructured item. In Object we have to use the key name only.
+
+	cont person = {name:'sanjeev', age:32, job:'developer'};
+	const {name, age} = person;
+
+we can also give a alias name like this
+
+	const {name:userName, age} = person;
+
+here userName can now be used instead of name.
+
+
 --------------------------------------------------------------------------------------
- Template Literals
+ Iterable and Iterator Object
 --------------------------------------------------------------------------------------
 
-Back-ticks(`) can be used instead of Single Quotes(') or Double Quotes(") for string containation as below
+There is a iterable and iterator protocol that helps any object to be converted to an iterable object. such that for-of can be used on it.
 
-	let name = 'Sanjeev'
-	let age = 29;
-	let someValue = 'My Name is ' + name + " and my age is " + age;
+	let range = {
+		from: 1,
+		to: 5
+	};
 
-same can written with back-ticks, the advantage is it can be written with newline (output will appear with newline)
+	range[Symbol.iterator] = function() {
 
-	let someValue = `My Name is 
-		`+name+` and my age is ` + age;
+		// ...it returns the iterator object:
+		// 2. Onward, for..of works only with this iterator, asking it for next values
+		return {
+			current: this.from,
+			last: this.to,
 
-using Template Literals. its even more easier.
+			// 3. next() is called on each iteration by the for..of loop
+			next() {
+				// 4. it should return the value as an object {done:.., value :...}
+				if (this.current <= this.last) {
+					return { done: false, value: this.current++ };
+				} else {
+					return { done: true };
+				}
+			}
+		};
+	};
 
-	let someValue = `My Name is ${name} and my age is ${age}`;
+	// now it works!
+	for (let num of range) {
+		alert(num); // 1, then 2, 3, 4, 5
+	}
 
-\n is used to put linebreaks. where (\) is called a escape character.
+In the above code an non iterable range object is converted to a iterable object beacuse it now has a method with name Symbol.iterator and it returns a iterator object which must have a next() method to get the next value.
+
+The iterator object must be like {done: Boolean, value: any}
+
+Of course, Arrays are iterable. But there are many other built-in objects, that are iterable as well. For instance, strings are also iterable.
+
+--------------------------------------------------------------------------------------
+ Array Like Object
+--------------------------------------------------------------------------------------
+
+An Object which has a length property of a non-negative Integer, and usually some indexed properties
+
+	var ao1 = {length: 0},                     // like []
+    ao2 = {0: 'foo', 5: 'bar', length: 6}; // like ["foo", undefined × 4, "bar"]
+
+They are called array like but not an array because 
+
+It's not constructed by Array or with an Array literal [], and so (usually) won't inherit from Array.prototype. The length property will not usually automatically update either
+
+Now we can use slice() function or Array.from() to convert to an Array.
+
+--------------------------------------------------------------------------------------
+ Sets
+--------------------------------------------------------------------------------------
+
+Similar to Arrays, they allow store unique sets of primitive types /array or object. they cannot be accessed based on index.
+Sets order is not guranteed.
+
+	const ids = new Set([1,2,3,4,5]);
+	ids.add(6) 	// this add 6
+
+	ids.add(2)	// this will not add as duplicate value, but wil not give any error.
+
+	ids.delete(3)	// this will delete 3
+
+entries() returns a iterable object. which can be used in a for-of loops, this returns the value twice(to match the map object).
+
+	for(let id of ids.entries()){
+		console.log(id);
+	}
+
+	// this outputs as below
+	
+	(2) [1, 1]
+ 	(2) [2, 2]
+ 	(2) [4, 4]
+ 	(2) [5, 5]
+ 	(2) [6, 6]
+
+values() can be used to get object with single value.
+
+	for(let id of ids.entries()){
+		console.log(id);
+	}
+
+	// this outputs as below
+	
+	1
+	2
+	3
+	4
+	5
+	6
+
+WeakSet() is used to created sets that can have the items get garbage collected once the item refrence is removed.
+
+	let person1 = {name:'sanjeev'};
+	const personData = new WeakSet(person1);
+
+	person1 = null;
+
+	console.log(personData);
+
+--------------------------------------------------------------------------------------
+ Maps
+--------------------------------------------------------------------------------------
+
+similar to sets, but ordred is guranteed and access by keys. keys cannot be duplicate
+
+	const person1 = {name:'sanjeev'};
+	const person2 = {name:'rohit'};
+
+	const personData = new Map([[person1,['date':'yesterday', price:200]]]);
+	console.log(personData);
+
+	personData.set(person2, [{date:'now',price:223}]);
+
+	console.log(personData);
+
+we can set an array like using push() in array we use set() in maps.
+
+we use get() to get the value based on key
+
+	console.log(personData.get(person2));
+
+we can also use .entries() and .values() as earlier to get the values, we can also use .keys() to get the keys only
+
+WeakMap() is used to created maps that can have they keys get garbage collected once the key refrence is removed.
+
+	let person1 = {name:'sanjeev'};
+	const personData = new WeakMap([[person1, 'some text']]);
+
+	person1 = null;
+
+	console.log(personData);
 
 --------------------------------------------------------------------------------------
  Operators
@@ -702,6 +982,8 @@ the above code will skip the item where value is 3, it will continue any next it
 
 
 Labeled Statement -	It helps break the parent loop from child look.
+
+Array.forEach()		- This can be used to loop through and array. The advantage over for-of is both item and index are avilable at once.
 
 --------------------------------------------------------------------------------------
  Try, Catch, Finally and Throw
@@ -1051,13 +1333,15 @@ Parent Selectors
 
 	parentNode		- Selects direct parent Node
 	parentElement	- Selects direct the parent Node if its also an element node else returns null
+
+Ancestors Selectors
+
 	closest			- Selects the parent element based on the css selector
 
 Child Selectors
 
 	childNodes			- Selects all direct child nodes
-	children			- Selects all direct child elements. only availble if the current object is an element
-	querySelector		- This can also be used to find children. instead of document.querySelector we can use it with the item 	itself.
+	children			- Selects all direct child elements. only availble if the current object is an element	
 	firstChild			- first child node
 	firstElementChild	- first child element 
 	lastChild			- last child node
@@ -1070,7 +1354,80 @@ Sibling Selectors
 	nextSibling				- next sibling same parent node
 	nextElementSibling		- next sibling same parent element
 
-	
+Descendent Selectors
 
+	querySelector		- This can also be used to find children. instead of document.querySelector we can use it with the item 	itself.
+
+--------------------------------------------------------------------------------------
+ DOM API - Traversing DOM vs Query Selector
+--------------------------------------------------------------------------------------	
+
+Query Selector is touch slower then Traversing DOM with ether nodes or element selectors. But in case of complex selectors/ nested selectors the Query Selector is the preferred way, as it would be easier to read and maintain.
+
+
+--------------------------------------------------------------------------------------
+ DOM API - Adding Style
+--------------------------------------------------------------------------------------	
+
+We can use the style property to set inline style
+
+	someElement.style.color = "white";
+	someElement.style.backgroundColor = "#fff";
+
+We can use the className property to modify the class names of a given element
+
+	someElement.className = "redClass blueClass";
+
+We can also use the classList propety to add, delete, replace or toggle a class.
+
+	someElement.classList.add('redClass');
+	someElement.classList.remove('blueClass');
+
+Adding class using the classList property is the recommended method, as it can handle complex cases.
+
+--------------------------------------------------------------------------------------
+ DOM API - Adding Element to DOM
+--------------------------------------------------------------------------------------	
+
+innerHTML				- adds as a string of html markup. this rerenders and is performance heavy.
+
+insetAdjacentHTML()		- it takes 2 parameters, position and the html markup to be added.
+
+		beforebegin		- it adds the markup before the current element
+		afterbegin		- it adds before the first element
+		beforeend		- it adds at the end
+		afterend		- it adds after the current element
+
+		beforebegin and afterend works only if the current element has a parent element.
+
+insertAdjacentElement()	- it takes 2 parameters, position and the element node.
+
+appendChild()			- adds an element node created using document.createElement() to the end
+
+append()				- adds an element node or a dom string to the end of the current node.
+
+prepend()				- add to the top of the current element.
+
+before()				- adds before the current selected node
+
+after()					- adds after the current selected node
+
+cloneNode(false)		- clones an element node with or wihouth child nodes based on a boolean parameter.
+
+replaceWith()			- this actually replace the current node with the passed node.
+
+replaceChild()			- this replaces the child node with new node passed
+
+--------------------------------------------------------------------------------------
+ DOM API - Removing Element from DOM
+--------------------------------------------------------------------------------------	
+
+	element.parentElement.removeChild(element);
+
+The above method is well supported by all browsers.
+
+	element.remove():
+
+The above method is also supported by all browsers (except IE)
 
 
