@@ -1430,4 +1430,218 @@ The above method is well supported by all browsers.
 
 The above method is also supported by all browsers (except IE)
 
+--------------------------------------------------------------------------------------
+ this keyword
+--------------------------------------------------------------------------------------	
 
+1. this keyword inside an object method
+
+	const person = {
+		name:'sanjeev', 
+		age:32, 
+		job:'developer',
+		getFormattedData(){
+			return this
+		}
+	};
+
+	console.log(person.getFormattedData());		// logs the person object
+	let {getFormattedData} = person;
+	console.log(getFormattedData);				// logs the window object
+
+	so this refers to the calling object.
+
+		person.getFormattedData()	, the calling object is person.
+
+	in second destructured way
+
+		getFormattedData()			, we directly call it which is equivalent to window.getFormattedData(). so calling object is window
+
+	lets use the bind() method to pass this of our choice.
+
+		getFormattedData = getFormattedData.bind(person);
+		getFormattedData();			// now we have passed the person object as this using bind so, this now points to person
+
+	lets use the call() method to pass this of our choice. the difference is bind() makes the function ready for future use, call() and apply() is used when the function needs to be executed immediately.
+
+		getFormattedData.call(movie);		// this can take n number of arguments
+
+		getFormattedData.apply(movie);		// this takes only 2 arguments.
+
+
+2. this when function is attached to event listener
+
+	in such case the this referes to the event object who triggered that event.  Browser defines this in such case.
+
+	for anonymous function
+
+		const showData = function() {
+			return this;
+		}
+
+		someButton.addEventListener('click',showData);
+
+	on click the this will return the button object.
+
+	for arrow function
+
+		const showData = () => {
+			return this;
+		}
+
+	on click the this will be the windows object, as arrow function doesnot set their own this. 
+
+3. this inside an arrow function
+
+	function declared with function keyword / the method shortcut, will bind their own this. which will depend on who called that function
+
+		function showData(){
+			console.log(this);
+		}
+
+		showData();		// logs window object
+
+	in strict mode, this will return as undefined with the function being declared with function keyword.
+
+		'use strict';
+
+		function showData(){
+			console.log(this);
+		}
+
+		showData();		// logs undefined		
+
+	in strict mode, if explicityly called with window.showData() then it will again log window.
+
+		'use strict';
+
+		function showData(){
+			console.log(this);
+		}
+
+		window.showData();	// logs window object
+
+	in strict mode/ normal mode, with arrow function the behaviour will be same and this will be outside the arrow function
+
+		'use strict';
+
+		const showData = ()=>{
+			console.log(this);
+		}
+
+		showData();		// logs window object.
+
+	inside object, now this keyword will point to what it was outside the arrow function. here it is nested inside another function which is declared with function keyword
+
+		const person = {
+			name:'sanjeev', 
+			age:30,
+			getAge : function(){
+				const getThis = () => {
+					return this;
+				}
+				return getThis();
+			}
+		};
+
+		console.log(person.getAge());		// logs the person object.
+
+	changing the getAge() function to arrow function will behave as below
+
+		const person = {
+			name:'sanjeev', 
+			age:30,
+			getAge : () => {
+				const getThis = () => {
+					return this;
+				}
+				return getThis();
+			}
+		};
+
+		console.log(person.getAge());		// logs the windows object.
+
+	lets nest normal function inside the arrow function.
+
+		const person = {
+			name:'sanjeev', 
+			age:30,
+			getAge : () => {
+				const getThis = function(){
+					return this;
+				}
+				return getThis();
+			}
+		};
+
+		console.log(person.getAge());	// this logs window
+
+	here the function inside the getAge() is not a method but a function and hence it is same if we declare it outside the object. an how the this binds for a function outside an object, it binds to the global window object.
+
+	now if we use the strict mode it will make it clear.
+
+		'use strict';
+
+		const person = {
+			name:'sanjeev', 
+			age:30,
+			getAge : () => {
+				const getThis = function(){
+					return this;
+				}
+				return getThis();
+			}
+		};
+
+		console.log(person.getAge());	// this again logs undefined.
+
+4. when method is passed to another object
+
+		const person = { 
+			name: 'Max',
+			greet() {
+				console.log(this.name);
+			}
+		};	
+		
+		const anotherPerson = { name: 'Manuel' }; // does NOT have a built-in greet method!
+	
+		anotherPerson.sayHi = person.greet; // greet is NOT called here, it's just assigned to a new property/ method on the "anotherPerson" object
+		
+		anotherPerson.sayHi(); // logs 'Manuel'
+
+	lets pass a normal function then
+
+		const person = { 
+			name: 'Max',
+			greet() {
+				return function(){console.log(this.name)};
+			}
+		};
+
+		const anotherPerson = { name: 'Manuel' }; // does NOT have a built-in greet method!
+		
+		anotherPerson.sayHi = person.greet(); // greet is called here and returned function is stored in "anotherPerson" object
+		
+		anotherPerson.sayHi(); // logs 'Manuel' 
+	
+	since function is normal function it binds its own this, this is what called the function which is anotherPerson.
+
+	let pass a arrow function then
+
+		const person = { 
+			name: 'Max',
+			greet() {
+				return ()=>{console.log(this.name)};
+			}
+		};
+		
+		function outGreet(){console.log(this.name)};
+
+		const anotherPerson = { name: 'Manuel' }; // does NOT have a built-in greet method!
+		
+		anotherPerson.sayHi = person.greet(); // greet is NOT called here, it's just assigned to a new property/ method on the "anotherPerson" object
+		
+		anotherPerson.sayHi(); // logs 'Max' 
+
+	this is happening due to closure, since in the arrow function this is as it outside the function and any scope is also passed, now three are 2 names one in global scope and local scope, the local scope is being used.
