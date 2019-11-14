@@ -1645,3 +1645,91 @@ The above method is also supported by all browsers (except IE)
 		anotherPerson.sayHi(); // logs 'Max' 
 
 	this is happening due to closure, since in the arrow function this is as it outside the function and any scope is also passed, now three are 2 names one in global scope and local scope, the local scope is being used.
+
+--------------------------------------------------------------------------------------
+ Getter and Setter
+--------------------------------------------------------------------------------------	
+
+Normal properties used in the object are called data properties, while getter and setter are called accesor property.
+
+Benifit of using getter and setter over data properties:
+
+1. we can validate the data before being set.
+2. we can process the data, before being set. like uppercase the input or concat something.
+3. we can set read only property.
+4. we can set private data property which can be set and get using the encapsulated setter and getter properties.
+5. instead of explicitly calling a method for data assign and retreival, the setter and getter methods are called implicitly, and hence help inforce data integrity.
+
+all private data properties have a prefixed _ character to ressemble it being a private property. this is rather a recommendation and not a syntax.
+
+we can create setter and getter either using the set and get keyword, or using the object.defineProperty method.
+
+	let person = {
+		_name: 'Johnson Ogwuru',
+		_age: 137,
+
+		set age(newage){
+			if(typeof newage === 'number'){
+				this._age = newage;				
+			}
+			else{
+				console.log ('Invalid input');
+			}
+		}
+  	};
+
+in the above code the age method has a preceding set keyword, which makes the method a accessor property. now we can use the property as normal data property.
+
+	person.age = 38;
+
+note here we used the age not the _age property.
+
+we can also have a getter function using the get keyword.
+
+	get age(){
+      return this._age
+    }
+
+to get the age we can use the getter as normal property is used.
+
+	console.log(person.age);	// this will output the value of _age data property.
+
+so the actual _age property is encapsulated by using the age accesor property.
+
+with the defineProperty method we can actually create a property after it has been initialized.
+
+	var o = {a: 0};
+
+	Object.defineProperty(o, 'b', { get: function() { return this.a + 1; } });
+
+	console.log(o.b) // Runs the getter, which yields a + 1 (which is 1)
+
+--------------------------------------------------------------------------------------
+ Class & Object
+--------------------------------------------------------------------------------------	
+
+Class can be used to create a blueprint for object which have similar structure, it helps in code reusablity. Class are not hoisted like function declaration.
+
+	class Product {
+		title = "DEFAULT";
+		imageURL;
+		description;
+		price;
+	}
+
+	const obj = new Product();
+
+class is created with class keyword, the class contains fields, these fields are converted to properties when actual objects are created using the new keyword.
+
+we can assign property by . notation like obj.title = "Game CD". but there is a better way using class contructor method.
+
+	class Product {
+		contructor(title, imageURL, description, price) {
+			this.title = title;
+			this.price = price;
+		}
+	}
+
+	const obj1 = new Product('Game CD', 2003);
+	const obj2 = new Product('Movie CD', 1003);
+
