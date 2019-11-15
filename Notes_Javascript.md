@@ -1705,7 +1705,7 @@ with the defineProperty method we can actually create a property after it has be
 	console.log(o.b) // Runs the getter, which yields a + 1 (which is 1)
 
 --------------------------------------------------------------------------------------
- Class & Object
+ Class 
 --------------------------------------------------------------------------------------	
 
 Class can be used to create a blueprint for object which have similar structure, it helps in code reusablity. Class are not hoisted like function declaration.
@@ -1733,3 +1733,24 @@ we can assign property by . notation like obj.title = "Game CD". but there is a 
 	const obj1 = new Product('Game CD', 2003);
 	const obj2 = new Product('Movie CD', 1003);
 
+--------------------------------------------------------------------------------------
+ Class	- Static Method & Properties
+--------------------------------------------------------------------------------------	
+
+static methods and properties can be accessed without creating an instance of the class.
+
+	class App {
+		static cart;
+		
+		static init(){
+			const shop = new Shop();
+			shop.render();
+			this.cart = shop.cart;
+		}
+	}
+
+So here we are creating a static method called init() within class App.
+
+	App.init();
+
+to call we simply use the class name and called the method, without creating any object.
