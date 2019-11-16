@@ -1815,3 +1815,189 @@ But in case the child class has its own constructor mehtod than that is called a
 	let rabbit = new Rabbit("Rabbit","White");
 
 here we have created constructor method for the child class with a new parameter of color. now we call the parent constructor with super() with name as an argument.
+
+
+--------------------------------------------------------------------------------------
+ Class	- Private Property
+--------------------------------------------------------------------------------------	
+
+private properties can be defined via prepending any field inside the class with a # symbol. only fields can be marked as private not the property. 
+
+private properties are useful when the property is only used inside the class and cannot be/should not be accessible outside the classs.
+
+	class Rectangle {
+		#height = 0;
+		width;
+		constructor(height, width) {    
+			this.#height = height;
+			this.width = width;
+		}
+	}
+
+here width is a normal field while the height is a private field.
+
+Before the private property feature came , there is also a pseudo private property we have looked earlier. here any private property is marked with a prpended _ sign. this symbolyses that the property is private. It is rather a convention than a feature and the private property declared as such is accessible outside the class. it just a flag that the property is private and should not be modified outside the class.
+
+	class User {
+		constructor() {
+			this._role = 'admin';
+		}
+	}
+	
+	// or directly in an object
+	
+	const product = {
+		_internalId: 'abc1'
+	};
+
+--------------------------------------------------------------------------------------
+ Class	- instanceof operator
+--------------------------------------------------------------------------------------	
+
+It is used to test if a given object is an instance of a class.
+
+
+	class Animal {
+		constructor(name) {
+			this.speed = 0;
+			this.name = name;
+		}
+		run(speed) {
+			this.speed += speed;
+			alert(`${this.name} runs with speed ${this.speed}.`);
+		}
+		stop() {
+			this.speed = 0;
+			alert(`${this.name} stands still.`);
+		}
+	}
+
+	let animal = new Animal("My animal");
+	let someObj = new Object();
+
+	console.log(animal instanceof Animal)		// returns true.
+
+	console.log(animal instanceof Object)		// returns true.
+
+	console.log(someObj instanceof Animal)		// returns false.
+
+It actually tests whether the given Object appears in the protorype chain or not. This is the reason that animal instanceof Object returns true. Though the animal object is not directly an instanceof Object but is part of the prototype chain.
+
+
+--------------------------------------------------------------------------------------
+ Object Descriptor
+--------------------------------------------------------------------------------------	
+
+By default objects have key value pair. but there is more to it. They also have Descriptors/ Property Flags. They are automatically created, they are the meta information stored by the engine.
+
+other than values we have 3 more flags, these are set to true by default but can be changed to have more control.
+
+	writable – if true, the value can be changed, otherwise it’s read-only.
+
+	enumerable – if true, then listed in loops, otherwise not listed.
+
+	configurable – if true, the property can be deleted and these attributes can be modified, otherwise not.
+
+we can view an object decriptors by using 
+
+	Object.getOwnPropertyDescriptor(obj, propertyName)
+	
+This will get the Descriptor for a specific property
+
+	let user = {
+		name: "John"
+	};
+
+	let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
+
+	alert( JSON.stringify(descriptor, null, 2 ) );
+	
+	/* property descriptor:
+	{
+		"value": "John",
+		"writable": true,
+		"enumerable": true,
+		"configurable": true
+	}
+
+for all descriptors at once use
+
+	Object.getOwnPropertyDescriptors(Obj);
+
+--------------------------------------------------------------------------------------
+ Object Descriptor	- Make Non Writable Property
+--------------------------------------------------------------------------------------
+
+we can use the Object.defineProperty(obj, propertyName, propertyObject)
+
+This can be used to not only define new object property but also edit existing property.
+
+To make an object non writable do as below:
+
+	let user = {
+		name: "John"
+	};
+
+	Object.defineProperty(user, "name", {
+	writable: false
+	});
+
+	user.name = "Pete";   	// Though this wont give an error but the value assignment will be ignorned.
+
+	console.log(user.name)  // this will list John
+
+--------------------------------------------------------------------------------------
+ Object Descriptor	- Make Non Enumrable Property
+--------------------------------------------------------------------------------------
+
+Non Enumerable properties cannot be used inside a loop
+
+By default, both our properties are listed:
+
+	let user = {
+		name: "John",
+		toString() {
+			return this.name;
+		}
+	};
+
+	
+	for (let key in user) alert(key); // name, toString
+
+lets make the toString method Non enumerable.
+
+	let user = {
+		name: "John",
+		toString() {
+			return this.name;
+		}
+	};
+
+	Object.defineProperty(user, "toString", {
+		enumerable: false
+	});
+
+	for (let key in user) alert(key); // Now our toString disappears:
+
+--------------------------------------------------------------------------------------
+ Object Descriptor	- Make Non Configurable Property
+--------------------------------------------------------------------------------------
+
+The non-configurable flag (configurable:false) is sometimes preset for built-in objects and properties.
+
+A non-configurable property can not be deleted.
+
+For instance, Math.PI is non-writable, non-enumerable and non-configurable:
+
+	let user = { };
+
+	Object.defineProperty(user, "name", {
+		value: "John",
+		writable: false,
+		configurable: false
+	});
+
+	
+	Object.defineProperty(user, "name", {writable: true}); // This will give an error as property made configurable false can now cannot be deleted as well as udpated,
+
+Property marked as configurable false, we can no longer delete as well as change the descriptors further.
