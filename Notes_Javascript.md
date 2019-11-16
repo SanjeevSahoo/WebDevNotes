@@ -1754,3 +1754,64 @@ So here we are creating a static method called init() within class App.
 	App.init();
 
 to call we simply use the class name and called the method, without creating any object.
+
+--------------------------------------------------------------------------------------
+ Class	- Inheritance
+--------------------------------------------------------------------------------------	
+
+classes can have more generic versions which have common method and attributes. we can then extend the class to create more specific version of it.
+This way we can have more reusable code and structure. Extended class have access to all the parent classes properties and methods.
+
+	class Animal {
+		constructor(name) {
+			this.speed = 0;
+			this.name = name;
+		}
+		run(speed) {
+			this.speed += speed;
+			alert(`${this.name} runs with speed ${this.speed}.`);
+		}
+		stop() {
+			this.speed = 0;
+			alert(`${this.name} stands still.`);
+		}
+	}
+
+	let animal = new Animal("My animal");
+
+here we are creating and Animal class which we can then inherit to create other animals (more specific animal class).
+
+	class Rabbit extends Animal {
+		hide() {
+			console.log(`${this.name} hides!`);
+		}
+	}
+
+	let rabbit = new Rabbit("White Rabbit");
+
+	rabbit.run(5); // White Rabbit runs with speed 5.
+	rabbit.hide(); // White Rabbit hides!
+
+here we have created a Rabbit class which inherits the Animal class, and hence the rabbit object created can access both the hide() method which is declared in the Rabbit class but also the run() method in Animal class
+
+we can also use the super() method that actually calls the constructor method of the parent class. since both child class and the parent class can have their own constructor methods. this is way that allows to call a parents constructor in the child contructor. 
+
+One thing to note is its recomended to call the super() before any other statement in the child contructor method.
+
+In case the child class doesnot have its own constructor method then the parent class constructor method is implicitly called. this is the reason why in the above code the "White Rabbit" name is assined to the name property . though we didn't specify this in the Rabbit class.
+
+But in case the child class has its own constructor mehtod than that is called and the parent class constructor is overriden. this creates a problem that the parent class constructor is never called. hence super() should be used.
+
+	class Rabbit extends Animal {
+		constructor(name, color){
+			super(name);
+			this.color = color;
+		}
+		hide() {
+			console.log(`${this.name} of ${this.color} color hides!`);
+		}
+	}
+
+	let rabbit = new Rabbit("Rabbit","White");
+
+here we have created constructor method for the child class with a new parameter of color. now we call the parent constructor with super() with name as an argument.
