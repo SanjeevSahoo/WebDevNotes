@@ -2036,3 +2036,182 @@ There are also methods that limit access to the whole object:
 		
 		Returns true if adding/removing/changing properties is forbidden, and all current properties are configurable: false, writable: false.
 
+--------------------------------------------------------------------------------------
+ Constructor Function
+--------------------------------------------------------------------------------------
+
+The regular {...} syntax allows to create one object. But often we need to create many similar objects, like multiple users or menu items and so on.
+
+That can be done using constructor functions and the "new" operator.
+
+Constructor functions technically are regular functions. There are two conventions though:
+
+	They are named with capital letter first.
+	They should be executed only with "new" operator.
+
+	function User(name) {
+		this.name = name;
+		this.isAdmin = false;
+	}
+
+	let user = new User("Jack");
+
+	alert(user.name); // Jack
+	alert(user.isAdmin); // false
+
+When a function is executed with new, it does the following steps:
+
+	A new empty object is created and assigned to this.
+	The function body executes. Usually it modifies this, adds new properties to it.
+	The value of this is returned.
+
+In other words, new User(...) does something like:
+
+	function User(name) {
+		// this = {};  (implicitly)
+
+		// add properties to this
+		this.name = name;
+		this.isAdmin = false;
+
+		// return this;  (implicitly)
+	}
+
+So let user = new User("Jack") gives the same result as:
+
+	let user = {
+		name: "Jack",
+		isAdmin: false
+	};
+
+Now if we want to create other users, we can call new User("Ann"), new User("Alice") and so on. Much shorter than using literals every time, and also easy to read.
+
+That’s the main purpose of constructors – to implement reusable object creation code.
+
+Let’s note once again – technically, any function can be used as a constructor. That is: any function can be run with new, and it will execute the algorithm above. The “capital letter first” is a common agreement, to make it clear that a function is to be run with new.
+
+Isnside a function, we can check whether it was called with new or without it, using a special new.target property.
+
+It is empty for regular calls and equals the function if called with new:
+
+	function User() {
+		alert(new.target);
+	}
+
+	// without "new":
+	User(); // undefined
+
+	// with "new":
+	new User(); // function User { ... }
+
+Usually, constructors do not have a return statement. Their task is to write all necessary stuff into this, and it automatically becomes the result.
+
+But if there is a return statement, then the rule is simple:
+
+	If return is called with an object, then the object is returned instead of this.
+	If return is called with a primitive, it’s ignored.
+	In other words, return with an object returns that object, in all other cases this is returned.
+
+
+--------------------------------------------------------------------------------------
+ Constructor Function - Class Contructor (A Syntactical Sugar)
+--------------------------------------------------------------------------------------
+
+class in javascript are syntactical sugars, that means they donot introduce any new feature, but are just some gives an option to use nice syntax. So the same thing can be done with older methods.
+
+	class Animal {
+		constructor(name, type){
+			this.name = name;
+			this.type = type;			
+		}	
+
+		printSummary() {
+			console.log(`The Animal is ${this.name} and its type is ${this.type}`);
+		}
+	}
+
+	let tiger = new Animal('Tiger', 'Mammal');
+	let snake = new Animal('Snake', 'Reptile');
+
+The above class can be written using the contructor function.
+
+	function Animal(name, type) {		
+		this.name = name;
+		this.type = type;
+		
+		Animal.prototype.printSummary = function() {
+			console.log(`The Animal is ${this.name} and its type is ${this.type}`);
+		}	
+	}
+
+	let tiger = new Animal('Tiger', 'Mammal');
+	let snake = new Animal('Snake', 'Reptile');
+
+But then there are more to class , there not just a syntactical sugar.
+
+	First, a function created by class is labelled by a special internal property [[FunctionKind]]:"classConstructor". So it’s not entirely the same as creating it manually.
+
+	And unlike a regular function, a class constructor must be called with new
+
+	Also, a string representation of a class constructor in most JavaScript engines starts with the “class…”
+
+	Class methods are non-enumerable. A class definition sets enumerable flag to false for all methods in the "prototype".
+
+	That’s good, because if we for..in over an object, we usually don’t want its class methods.
+
+	Classes always use strict. All code inside the class construct is automatically in strict mode.
+
+--------------------------------------------------------------------------------------
+ Prototype
+--------------------------------------------------------------------------------------
+
+In programming, we often want to take something and extend it.
+
+For instance, we have a user object with its properties and methods, and want to make admin and guest as slightly modified variants of it. We’d like to reuse what we have in user, not copy/reimplement its methods, just build a new object on top of it.
+
+Prototypal inheritance is a language feature that helps in that.
+
+In JavaScript, objects have a special hidden property [[Prototype]] (as named in the specification), that is either null or references another object. That object is called “a prototype”:
+
+The prototype is a little bit “magical”. When we want to read a property from object, and it’s missing, JavaScript automatically takes it from the prototype. In programming, such thing is called “prototypal inheritance”. Many cool language features and programming techniques are based on it.
+
+The property [[Prototype]] is internal and hidden, but there are many ways to set it.
+
+One of them is to use __proto__
+
+	let animal = {
+		eats: true
+	};
+	let rabbit = {
+		jumps: true
+	};
+
+	rabbit.__proto__ = animal;
+
+If we look for a property in rabbit, and it’s missing, JavaScript automatically takes it from animal.
+
+	alert( rabbit.eats ); // true (**)
+	alert( rabbit.jumps ); // true
+
+There are only two limitations:
+
+	The references can’t go in circles. JavaScript will throw an error if we try to assign __proto__ in a circle.	
+	The value of __proto__ can be either an object or null. Other types are ignored.
+	Also it may be obvious, but still: there can be only one [[Prototype]]. An object may not inherit from two others.
+
+__proto__ is not the same as [[Prototype]]. That’s a getter/setter for it.
+
+It exists for historical reasons. In modern language it is replaced with functions Object.getPrototypeOf/Object.setPrototypeOf that also get/set the prototype. 
+
+difference between prototype property and __proto__ property:
+
+	prototype property is used when new keyword is used to instantiate and new object from a function constructor. 
+	
+	we can also set the prototype object to a custom object. this property only takes a object and primitive type assigned will be ignored.
+
+	Not all objects have this prototype property. only function object/ constructor function have this property.
+	
+	__proto__ is what stores the prototype object which gets referenced from the function contructors prototype property.
+
+	so to get an objects prototype object we actually use the __proto__ and to know what would be the prototype of the objects inhertited from this object we can used the prototype prototype property
+
