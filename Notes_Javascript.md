@@ -131,6 +131,33 @@ Source Code ->
                                                     Optimized Machine Code ->
                                                                 Machine Code
 
+--------------------------------------------------------------------------------------
+ Javascript Runtime Environment
+--------------------------------------------------------------------------------------
+
+Javascript Engine runs inside some kind of environment, be it browser or nodejs. This provides some additonal features that the environment exposes via its API.
+
+JRE is responsible for making JavaScript asynchronous. It is the reason JavaScript is able to add event listeners and make HTTP requests asynchronously
+
+JRE is just like a container which consists of the following components:
+	
+	JS Engine
+	Web API
+	Callback Queue or message queue
+	Event Table
+	Event loop
+
+Web API contains the Event Listeners, Ajax Call, and Timeout methods. 
+
+Web APIs are not part of the JS engine but they are part of the JavaScript Runtime Environment which is provided by the browser. JavaScript just provides us with a mechanism to access these API’s. As Web APIs are browser specific, they may vary from browser to browser.
+
+Event Table is a table data structure to store the asynchronous methods which need to be executed when some event occurs.
+
+Callback queue follows FIFO, any event callback function is added to this queue. 
+
+Methods are executed neither in the event table nor in the event queue. They are executed by the JavaScript engine, only if it is present in the ECS. So, for the execution of any method, we need to move that method from the callback queue to the execution context stack. This is what the event loop does
+
+Event loop continuously checks if the execution context stack is empty and if there are any messages in the event queue. It will move the method from the callback queue to ECS only when the execution context stack is empty.
 
 --------------------------------------------------------------------------------------
  Script Declaration Inline or External File
@@ -2165,16 +2192,6 @@ But then there are more to class , there not just a syntactical sugar.
  Prototype
 --------------------------------------------------------------------------------------
 
-In programming, we often want to take something and extend it.
-
-For instance, we have a user object with its properties and methods, and want to make admin and guest as slightly modified variants of it. We’d like to reuse what we have in user, not copy/reimplement its methods, just build a new object on top of it.
-
-Prototypal inheritance is a language feature that helps in that.
-
-In JavaScript, objects have a special hidden property [[Prototype]] (as named in the specification), that is either null or references another object. That object is called “a prototype”:
-
-The prototype is a little bit “magical”. When we want to read a property from object, and it’s missing, JavaScript automatically takes it from the prototype. In programming, such thing is called “prototypal inheritance”. Many cool language features and programming techniques are based on it.
-
 The property [[Prototype]] is internal and hidden, but there are many ways to set it.
 
 One of them is to use __proto__
@@ -2210,8 +2227,36 @@ difference between prototype property and __proto__ property:
 	we can also set the prototype object to a custom object. this property only takes a object and primitive type assigned will be ignored.
 
 	Not all objects have this prototype property. only function object/ constructor function have this property.
+
+	The default "prototype" is an object with the only property constructor that points back to the function itself.
 	
+		function Rabbit() {}
+		
+		alert( Rabbit.prototype.constructor == Rabbit ); // true
+
 	__proto__ is what stores the prototype object which gets referenced from the function contructors prototype property.
 
 	so to get an objects prototype object we actually use the __proto__ and to know what would be the prototype of the objects inhertited from this object we can used the prototype prototype property
 
+When a function is created in JavaScript, the JavaScript engine adds a prototype property to the function. 
+This prototype property is an object (called as prototype object) which has a constructor property by default. 
+
+The constructor property points back to the function on which prototype object is a property. We can access the function’s prototype property using functionName.prototype.
+
+prototype property of the function is an object (prototype object) with two properties:
+	
+	constructor property which points to Human function itself
+	__proto__ property: We will discuss this while explaining inheritance in JavaScript
+
+When an object is created in JavaScript, JavaScript engine adds a __proto__ property to the newly created object which is called dunder proto. dunder proto or __proto__ points to the prototype object of the constructor function.
+
+As prototype object is an object, we can attach properties and methods to the prototype object. Thus, enabling all the objects created using the constructor function to share those properties and methods.
+
+When we try to access a property of an object, JavaScript engines first tries to find the property on the object, if the property is present on the object it outputs its value. But, if the property is not present on the object then it tries to find the property on the prototype object or dunder proto of the object. If the property is found the value is returned else JavaScript engine tries to find the property on the dunder proto of the object. This chain continues until the dunder proto property is null. In these cases, the output will be undefined.
+
+To solve the problems with the prototype and the problems with the constructor, we can combine both the constructor and function.
+	
+	Problem with the constructor function: Every object has its own instance of the function
+	Problem with the prototype: Modifying a property using one object reflects the other object also
+	
+To solve both problems, we can define all the object-specific properties inside the constructor and all shared properties and methods inside the prototype
