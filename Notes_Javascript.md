@@ -47,7 +47,10 @@ ES.Next 		- It is a dynamic name that ressemble the next version.
 --------------------------------------------------------------------------------------
 
 Javascript is also known as ECMAScript. Javascript version is often refered as ES5, ES6, ES7, or ESNext. 
+
 ECMA Stands for European Computer Manufacturers Association. They are the one who manages the javascript specification / ECMA Specification.
+
+Some time between 1996 and 1997, Netscape took JavaScript to the Ecma standards organization to carve out and maintain a specification for the language to enable other browser vendors to implement based on the work they had done. The Ecma Technical Committee 39 (better known as TC39) was created to continue to evolve the language, eventually releasing ECMA-262 Ed.1 in June 1997. ECMAScript is name of the official standard with JavaScript being the most well-known implementation of the standard. ActionScript (Macromedia) and JScript (Microsoft) are examples of other implementations.
 
 ECMA Specification is how the javascript language should work, but doesnot gurantee its implementation. Its upto the browsers vendors to implement the same. or rather say the individual Javascript Engine.
 
