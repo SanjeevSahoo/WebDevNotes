@@ -200,6 +200,88 @@ async	- keyowrd works the same as defer but the execution aslo happens after dow
 		the are download parallel to each other the download order is random.
 
 
+
+--------------------------------------------------------------------------------------
+ First Class functions
+--------------------------------------------------------------------------------------
+
+A programming language is said to have First-class functions when functions in that language are treated like any other variable. For example, in such a language, a function can be passed as an argument to other functions, can be returned by another function and can be assigned as a value to a variable
+
+--------------------------------------------------------------------------------------
+ Higher Order functions
+--------------------------------------------------------------------------------------
+
+A higher order function is a function that takes a function as an argument, or returns a function.
+
+Higher order function is in contrast to first order functions, which don’t take a function as an argument or return a function as output.
+
+For examples .map() and .filter(). Both of them take a function as an argument. They're both higher order functions.
+
+--------------------------------------------------------------------------------------
+ Programming Paradigms
+--------------------------------------------------------------------------------------
+
+The term programming paradigm is the style or way of thinking about and approaching problems. Simply, it is a style of programming. There can be more than one type programming paradigms. 
+
+	Imperative Programming
+
+		Procedural 
+		Object Oriented
+		Parallel
+
+	Declarative Programming
+
+		Functional
+		Logical
+		Database Processing
+
+https://medium.com/@darrion/what-is-meant-by-programming-paradigms-9b965a62b7c7
+
+Funtional Programming
+
+The Functional programming paradigm is mainly used to perform mathematical functions without changing the state. This paradigm can contain concepts like: pure functions, higher order functions and recursion(functions that call itself)
+
+Logical Programming
+
+It can be termed as abstract model of computation. It would solve logical problems like puzzles, series etc. In logic programming we have a knowledge base which we know before and along with the question and knowledge base which is given to machine, it produces result. In normal programming languages, such concept of knowledge base is not available but while using the concept of artificial intelligence, machine learning we have some models like Perception model which is using the same mechanism.
+
+--------------------------------------------------------------------------------------
+ Imperative vs Declarative Programming Styles
+--------------------------------------------------------------------------------------
+
+Imperative programming is like how you do something, and declarative programming is more like what you do.
+
+An imperative approach (HOW): “I see that table located under the Gone Fishin’ sign is empty. My husband and I are going to walk over there and sit down.”
+
+A declarative approach (WHAT): “Table for two, please.”
+
+The imperative approach is concerned with HOW you’re actually going to get a seat. You need to list out the steps to be able to show HOW you’re going to get a table. The declarative approach is more concerned with WHAT you want, a table for two.
+
+	Imperative: C, C++, Java
+
+	Declarative: SQL, HTML
+
+	(Can Be) Mix: JavaScript, C#, Python
+
+Example of Imperative Code:
+
+	function double (arr) {
+		let results = []
+		for (let i = 0; i < arr.length; i++){
+			results.push(arr[i] * 2)
+		}
+		return results
+	}
+
+Example of Same Code in Declarative Form:
+
+	function double (arr) {
+		return arr.map((item) => item * 2)
+	}
+
+https://tylermcginnis.com/imperative-vs-declarative-programming/
+
+
 --------------------------------------------------------------------------------------
  Type of Datatypes
 --------------------------------------------------------------------------------------
@@ -222,6 +304,52 @@ typeof null is object        this is due to a bug in javascript which is not fix
 const x = +'123' // this will convert it to number.
 
 const x = '' + 123 // this will convert it to string.
+
+--------------------------------------------------------------------------------------
+ Javascript has Dynamic type checking
+--------------------------------------------------------------------------------------
+
+Dynamic type checking means the type of a varaible is checked at runtime, so you can assign different type of data to same variable at different parts of your code, the type will checked at the time any operation is done on it.
+
+In static typed language, you have to explicitly specify the type of any variable.
+
+So in dynamically typed language any error if there is found at runtime, while in static typed language it gives error at compile time.
+
+Javascript is weakly typed/ dynamic typed language.
+
+to implement static type checking in javascript we need to use a type checker, like Flow or Typescript.
+
+With Flow, the below code will give an error during transpilling (transpiling is required as the annonated strings are not supported by vanilla javascript.)
+
+	function concat(a: string, b: string) {
+		return a + b;
+	}
+
+	let string1: string = "hello"
+	let string2: number = 42
+
+	concat(string1, string2)
+
+Dynamic Typed use case
+
+	function fn(x) {
+		if(!x) {
+			return false;
+		}
+	
+		x += 1;
+		return x;
+	}
+
+	fn(2)			// 3
+	fn("hello") 	// "hello1"
+	fn(_ => 3) 		// "_ => 31"
+	fn({prop:1}) 	// "[object Object]1"
+
+So the output depends on the type of data passed as an argument to the function.
+
+https://blog.bitsrc.io/static-type-checking-vs-dynamic-type-checking-in-javascript-13643f4952a9
+
 
 --------------------------------------------------------------------------------------
  Comments in Javascripts
@@ -2260,3 +2388,13 @@ To solve the problems with the prototype and the problems with the constructor, 
 	Problem with the prototype: Modifying a property using one object reflects the other object also
 	
 To solve both problems, we can define all the object-specific properties inside the constructor and all shared properties and methods inside the prototype
+
+--------------------------------------------------------------------------------------
+ References
+--------------------------------------------------------------------------------------
+
+https://javascript.info/js
+
+https://medium.com/@darrion/what-is-meant-by-programming-paradigms-9b965a62b7c7
+
+https://tylermcginnis.com/imperative-vs-declarative-programming/
