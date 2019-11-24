@@ -1288,7 +1288,7 @@ JavaScript is a "hosted language". The browser as host environment exposes this 
 
 When the browser parsed the HTML document, it forms a tree structure containing the object representation of all the HTML Tags.
 
-D	-	Document, sicne it is representation of the HTML Document
+D	-	Document, since it is representation of the HTML Document
 O	-	Oject, since the elements are represented as object.
 M	-	Model, the way the objects are arranged , the structure of the object, which is a tree structure.
 
@@ -1334,6 +1334,10 @@ The document.querySelectorAll() is a non live list, this is an snapshot of the c
 
 NodeList is are mostly non live list, HTMLCollection is mostly live list. there are exceptions also
 NodeList contains all nodes, Element, Text , comment etc. while HTMLCollection only hold element nodes.
+
+Array.from() is used to conver a iterable object to array.
+
+we can use this over HTMLCollection or NodeList to get an array. But converting to array makes the list non live.
 
 --------------------------------------------------------------------------------------
  DOM API - property vs attribute
@@ -2260,3 +2264,89 @@ To solve the problems with the prototype and the problems with the constructor, 
 	Problem with the prototype: Modifying a property using one object reflects the other object also
 	
 To solve both problems, we can define all the object-specific properties inside the constructor and all shared properties and methods inside the prototype
+
+Object.prototype is end of prototype chain.
+
+we can add static method to class or as property to a normal constructor function. such property is not part of the object prototype, but they are actually accesible via the object. notation as object property is accesed. they are nether copied to the child object created using the new keyword.
+
+	class Animal{
+		constructor(type,legs){
+			this.type = type;
+			this.legs = legs
+			this.speed = function(){
+				console.log(this.legs * 5);
+			}
+		}
+
+		getLegs = function(){
+			console.log(this.legs);
+		}
+
+		getType(){
+			console.log(this.type);
+		}
+	}
+
+	let objAn = new Animal('Cat',4);
+	objAn.speed();
+	objAn.getLegs();
+	objAn.getType();
+
+In the above code the methods speed(), getLegs() are copied to every object created, while the method using the shorthand syntax getType() is added to the prototype object and hence is only refereced in every object via the prototype object. This is equivalent to writing the below code using the function constructor.
+
+
+	function Animal(type, legs){
+		this.type = type;
+		this.legs = legs;
+		this.speed = function(){
+			console.log(this.legs*5);
+		}
+		this.getLegs = function(){
+			console.log(this.legs);
+		}	
+		
+	}
+
+	Animal.prototype.getType = function(){
+		console.log(this.type);
+	}
+
+	let objAn = new Animal('Cat',4);
+	objAn.speed();
+	objAn.getLegs();
+	objAn.getType();
+
+--------------------------------------------------------------------------------------
+ Prototype - setPrototypeOf() and getPrototypeOf(), Object.create()
+--------------------------------------------------------------------------------------
+
+using the __proto__ is an outdated way of accessing and updating the proto object. we can instead use the setPrototypeOf and getPrototypeOf method.
+
+	let animal = {
+		eats: true
+	};
+
+	// create a new object with animal as a prototype
+	let rabbit = Object.create(animal);
+
+	alert(rabbit.eats); // true
+
+	alert(Object.getPrototypeOf(rabbit) === animal); // true
+
+	Object.setPrototypeOf(rabbit, {}); // change the prototype of rabbit to {}
+
+The Object.create() method creates a new object, using an existing object as the prototype of the newly created object.
+
+	let animal = {
+		eats: true
+	};
+
+	let rabbit = Object.create(animal, {
+		jumps: {
+			value: true
+		}
+	});
+
+	alert(rabbit.jumps); // true
+
+here the first argument is the object to be used as the prototype and second argument is the object descriptors.
