@@ -1593,6 +1593,18 @@ The above method is well supported by all browsers.
 The above method is also supported by all browsers (except IE)
 
 --------------------------------------------------------------------------------------
+ DOM API - Read and Write DOM Data attributes
+--------------------------------------------------------------------------------------	
+
+We can add custom data attributes to an element, thought we can name anything but by adding name as data-*, we can use the dataset property.
+
+This dataset property contains an object with all the data attributes for the element.
+
+	console.log(element.dataset.someData);
+
+By default the data stored as data-some-data will be coverted to someData. data-somedata will remain somedata.
+
+--------------------------------------------------------------------------------------
  this keyword
 --------------------------------------------------------------------------------------	
 
