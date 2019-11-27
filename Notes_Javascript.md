@@ -2676,4 +2676,31 @@ The the event phase goes as below once user clicks on the p tag:
 		<- document
 	window (Bubbling Phase ends)
 
-In Capture Phase it goes from Parent to Child and then in Bubbling Phase it goes Target to Parent, it fires all event listeners attached to the elements in between.
+In Capture Phase it goes from Parent to Child (outer element to inner element) and then in Bubbling Phase it goes Target to Parent (inner element to outer element), it fires all event listeners attached to the elements in between.
+
+Not all events bubble, this can be varified by checking the bubbles property of the event object.
+
+--------------------------------------------------------------------------------------
+ Event Delegation
+--------------------------------------------------------------------------------------
+
+As the word delegation means event delegation means delegating your work to some other person.
+
+so suppose we have the below ul.
+
+	<ul>
+		<li>level 1</li>
+		<li>level 2</li>
+		<li>level 3</li>
+	</ul>
+
+now we want to color the li which was clicked to a red color. we can add event listener in a loop to all the li.
+
+or we can use the event delegation to add the event listener to the ul and then use the event.target to check which li was clicked.
+
+we can even trigger an event programatically, like suppose we have button to clicked when the above li is clicked. then we can write
+
+	btnElement.click();
+
+This will then trigger the button click event.
+
