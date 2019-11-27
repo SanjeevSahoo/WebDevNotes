@@ -2493,3 +2493,187 @@ The Object.create() method creates a new object, using an existing object as the
 	alert(rabbit.jumps); // true
 
 here the first argument is the object to be used as the prototype and second argument is the object descriptors.
+
+
+--------------------------------------------------------------------------------------
+ DOM API - Scrolling
+--------------------------------------------------------------------------------------
+
+	element.scrollTo(0, 50);	
+	
+	this will make the element scroll to 50 from the top based on the default rendered position.
+
+	element.scrollTo({top:50, behavior:'smooth'});
+
+	this will make the same but with a smooth scolling animation
+
+	element.scrollBy(50)
+
+	this scroll by a fixed amount like here by 50px;
+
+	element.scrollIntoView();
+
+	this makes the element scroll such that the element is visible.
+
+--------------------------------------------------------------------------------------
+ Template Tag
+--------------------------------------------------------------------------------------
+
+we can use the template tag to insert some template section which will be used later to show some information. template tag is not rendered and displayed in the html body.
+
+	<template>
+		<h3>This is some info</h3>
+	</template>
+
+This template can the be used in javascript.
+
+--------------------------------------------------------------------------------------
+ Dynamic Script Loading
+--------------------------------------------------------------------------------------
+
+we can use the document.CreateElement('script'); to add new script to the page.
+
+	const script = document.createElement('script');
+	script.textContent = "alert('hi this is dynamic script');";
+	document.head.append(script);
+
+This will add dynamic script in the head of the document.
+
+--------------------------------------------------------------------------------------
+ Timers and Interval
+--------------------------------------------------------------------------------------
+
+we can use the setTimeout(function,time in millisecond);. This executes the function once after the specified millseconds.
+
+we can use the setInterval(function,time); This will execute the function repeateadly based on the time interval.
+
+The setInterval/ setTimeout can be also be stopped. Any timer actually returns a  tiemrid, which can then be used to stop the timer.
+
+	const timerid = setInterval(console.log('hi'),3000);	// this will add a interval
+
+	clearInterval(timerid);		// this will stop the interval
+
+--------------------------------------------------------------------------------------
+ Location, History and Navigator Object
+--------------------------------------------------------------------------------------
+
+location.href can be used to navigate use to a new url. This adds to history.
+
+location.replace() is used to replace the url. This reloads the history.
+
+location.assign() is same as location.href.
+
+location.host, location.origin, location.pathname etc helps about the current user location url.
+
+history allows to move user back and forward in the browser history.
+
+history.back() takes user one page back.
+
+history.forward() takes user one step back.
+
+history.go(5) takes user to the 5th history page.
+
+navigator.geoLocation.getCurrentPosition((data)=>{console.log(data)});
+
+the above code helps get the user geolocation. if allowed by the user.
+
+--------------------------------------------------------------------------------------
+ Error Object
+--------------------------------------------------------------------------------------
+
+Error object can be used to create an error which can then be passed to the throw keyword.
+
+error object thrown also gives the  stack trace of error.
+
+	throw new Error('DB Error');
+
+the throw keyword can also throw any object but Error object also allows adding extra information.
+
+--------------------------------------------------------------------------------------
+ Removing Event Listener
+--------------------------------------------------------------------------------------
+
+	function logData(e){
+		console.log(e.target);
+	}
+
+	btn.addEventListener('click',logData);	// adds an event listener
+
+	btn.removeEventListener('click',logData);	// remove the event listener
+
+to remove the event should be passed with the actual function object that was used to create the event.
+
+In case of bind() being added to same function, creates two different function object.
+
+event object is passed by default in case of an event listener.
+
+event.target gives the element which invoked the event.
+
+disabled button does not trigger any click event.
+
+--------------------------------------------------------------------------------------
+ event.preventDefault()
+--------------------------------------------------------------------------------------
+
+This helps prvent the default before of the event. like the submit button inside a form submit button.
+
+By default it would submit the form, but using event.preventDefault() we can prevent this behaviour.
+
+--------------------------------------------------------------------------------------
+ Event Capturing and Bubbling
+--------------------------------------------------------------------------------------
+
+Event Propagation happens in 3 phases
+
+	1. Capture Phase
+	2. Target Phase
+	3. Bubbling Phase
+
+When an event happens – the most nested element where it happens gets labeled as the “target element” (event.target).
+
+Then the event moves down from the document root to event.target, calling handlers assigned with addEventListener(...., true) on the way (true is a shorthand for {capture: true}).
+
+Then handlers are called on the target element itself.
+
+Then the event bubbles up from event.target up to the root, calling handlers assigned using on<event> and addEventListener without the 3rd argument or with the 3rd argument false/{capture:false}.
+
+Each handler can access event object properties:
+
+	event.target – the deepest element that originated the event.
+
+	event.currentTarget (=this) – the current element that handles the event (the one that has the handler on it)
+
+	event.eventPhase – the current phase (capturing=1, target=2, bubbling=3).
+
+By default all events bind with addEventListener to be triggered at Bubbling Phase. to trigger an event in capture Phase use the 3rd argument as true.
+
+We can stop event propagation by using event.stopPropagation() method. This will stop bubbling further up.
+
+We can also use event.stopImmediatePropagation() method, to stop any next handler attached to the same element. suppose we have 2 addEventListener on a button control, and we call the stopImmediatePropagation() on first handler then the second listener will not fire.
+
+Suppose we have the below markup
+
+	<form onclick="alert('form')">FORM
+		<div onclick="alert('div')">DIV
+			<p onclick="alert('p')">P</p>
+		</div>
+	</form>
+
+The the event phase goes as below once user clicks on the p tag:
+
+	window (Capture Phase Starts)
+		-> document
+			-> html 
+				-> body
+					-> form
+						-> div
+							-> p (Capture Phase ends here, and event is now in Target Phase
+								, the onlclick event handler now fires)
+						<- div (Bubbling Phase Starts)
+					<- form
+				<- body
+			<- html
+		<- document
+	window (Bubbling Phase ends)
+
+In Capture Phase it goes from Parent to Child and then in Bubbling Phase it goes Target to Parent, it fires all event listeners attached to the elements in between.
