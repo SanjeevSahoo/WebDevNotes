@@ -2704,3 +2704,29 @@ we can even trigger an event programatically, like suppose we have button to cli
 
 This will then trigger the button click event.
 
+--------------------------------------------------------------------------------------
+ Drag and Drop Events
+--------------------------------------------------------------------------------------
+
+We can make an element draggable by adding the draggable attribute as true for an element.once it is done the element is then draggable.
+
+By default the draggable attribute is false. also the default behaviour of an element is to not allow drop.
+
+Below are the drag events:
+
+	dragstart	- fires the moment element is started to be dragged
+	dragenter	- when dragged element enters for first time into an element bound.
+	dragover	- when we drag over and element.
+	dragleave	- fired when dragged element leaves the source element or destination element from which it is being dragged out or dragged into.
+
+With the dragstart event we can bind some data to the event.dataTransfer property. this can then be used in the drop event. the setData method takes the type of data and then the actual data.
+
+	event.dataTransfer.setData('text/plain', 'some value'); 
+
+Since The default behaviour of an element is to not allow drop. we have to call the event.preventDefault() on dragenter and dragover on the destination element, to be able to handle the drop event
+
+	drop		- this is fired when and element id droped over another element.
+	dragend		- this is fired on the element which was being dragged once the drag is actually end.
+
+In the drop event we can then read the dataTransfered.
+	
