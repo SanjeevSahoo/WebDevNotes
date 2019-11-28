@@ -2730,3 +2730,50 @@ Since The default behaviour of an element is to not allow drop. we have to call 
 
 In the drop event we can then read the dataTransfered.
 	
+--------------------------------------------------------------------------------------
+ Advanced Function Concepts
+--------------------------------------------------------------------------------------
+
+Pure vs Impure functions
+
+Pure functions are those which returns the same result for the same parameters passed, without any side effects. Side effects means without changing anything outside the function.
+
+	function addNumber(num1, num2){
+		return num1 + num2;
+	}
+
+	console.log(addNumber(1,3)); // returns 4
+	console.log(addNumber(1,3)); // returns 4, here value does not change until the parameter value change
+	console.log(addNumber(5,3)); // returns 8
+
+Impure functions are those which are not pure. so they either change any variable outside the function or are not consistant with the output for same set of parameters. 
+
+	let intPrevValue = 5;
+	function addNumber(num1, num2){
+		const sum = num1 + num2 ;
+		intPrevValue = sum;
+		return sum;
+	}
+
+here intPrevValue is changed inside the function and hence its not pure functions but an impure functions.
+
+Factory Functions
+
+These are called factory functions as they actually create more functions. There is a generic function which help prepare a function by preconfiguring it with some parameters that are fixed and then call them multiple times with parameters that change often.
+
+So a factory fucntion helps write less repeatative code.
+
+	function createTaxCalculator(tax){
+		return function(amount){
+			return amount*tax;
+		}
+	}
+
+	const calculateVat = createTaxCalculator(0.1);
+	const calculateServiceTax = createTaxCalculator(0.5);
+
+	console.log(calculateVat(555)); // logs 55.5
+	console.log(calculateVat(100)); // logs 10
+	console.log(calculateServiceTax(100)); // logs 50
+
+here same function is passed with different tax percentage to create new functions from other function.
