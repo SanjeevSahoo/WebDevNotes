@@ -2777,3 +2777,81 @@ So a factory fucntion helps write less repeatative code.
 	console.log(calculateServiceTax(100)); // logs 50
 
 here same function is passed with different tax percentage to create new functions from other function.
+
+Recursion Functions
+
+Functions that calls itself.
+
+	function powerOf(x, n){
+		return n===1?x:x*powerOf(x,n-1);
+	}
+
+	console.log(powerOf(2,3));	// logs 8
+
+--------------------------------------------------------------------------------------
+ Lexical Environment and Closure
+--------------------------------------------------------------------------------------
+
+Lexical Environment is created when code is run, that is in the execution phase.
+
+by default the global lexical environment is created. And an a new one is created for every code block within the global context.
+
+Lexical Environment : it's the internal js engine construct that holds identifier-variable mapping. (here identifier refers to the name of variables/functions, and variable is the reference to actual object [including function type object] or primitive value). A lexical environment also holds a reference to a parent lexical environment.
+
+Now, for every execution context -- 1) a corresponding lexical environment is created and 2) if any function is created in that execution context, reference to that lexical environment is stored at the internal property ( [[Environment]] ) of that function. So, every function tracks the lexical environment related to the execution context it was created in.
+
+And every lexical environment tracks its parent lexical environment (that of parent execution context). As a result, every function has a chain of lexical environments attached to it.
+
+	function makeCounter() {
+	let count = 0;
+	return function() {
+		return count++;
+	};
+	}
+
+	let counter1 = makeCounter();
+	let counter2 = makeCounter();
+
+	alert( counter1() ); // 0
+	alert( counter1() ); // 1
+
+	alert( counter2() ); // 0 (independent)
+
+In the above code new independed lexical environment is created for each instance of makeCounter.
+
+For a loop, every iteration has a separate Lexical Environment. If a variable is declared in for(let ...), then it’s also in there:
+
+	for (let i = 0; i < 10; i++) {
+	// Each loop has its own Lexical Environment
+	// {i: value}
+	}
+
+	alert(i); // Error, no such variable
+
+let i is visually outside of {...}. The for construct is special here: each iteration of the loop has its own Lexical Environment with the current i in it.
+
+Closure is created when a function can access its outer variable (via the lexical environment chain). closures are created for every function.
+
+--------------------------------------------------------------------------------------
+ Immediately Invoked Function Expression (IIFE)
+--------------------------------------------------------------------------------------
+
+In the past, there were no block-level lexical environments in JavaScript.
+
+So programmers had to invent something. And what they did was called “immediately-invoked function expressions” (abbreviated as IIFE).
+
+That’s not a thing we should use nowadays, but you can find them in old scripts, so it’s better to understand them.
+
+An IIFE looks like this:
+
+	(function() {
+
+	let message = "Hello";
+
+	alert(message); // Hello
+
+	})();
+
+Here a Function Expression is created and immediately called. So the code executes right away and has its own private variables.
+
+The Function Expression is wrapped with parenthesis (function {...}), because when JavaScript meets "function" in the main code flow, it understands it as the start of a Function Declaration. But a Function Declaration must have a name, so this kind of code will give an error
