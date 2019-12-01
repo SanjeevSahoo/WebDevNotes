@@ -2855,3 +2855,256 @@ An IIFE looks like this:
 Here a Function Expression is created and immediately called. So the code executes right away and has its own private variables.
 
 The Function Expression is wrapped with parenthesis (function {...}), because when JavaScript meets "function" in the main code flow, it understands it as the start of a Function Declaration. But a Function Declaration must have a name, so this kind of code will give an error
+
+--------------------------------------------------------------------------------------
+ Numbers
+--------------------------------------------------------------------------------------
+
+All numbers in javascript are floats. They are stored as 64 bit floats. one bit is for sign - .
+
+	Biggest number possible in javascript is 2^53 - 1 which is 9007199254740991 or -9007199254740991
+
+	Number.MAX_SAFE_INTEGER
+
+Javascript works with binary system and then coverts the value to decimal system.
+
+hence -9007199254740991 - 10 = -9007199254741000 which is strange if the above fact is not known. Here what happens is the extra bits are removed and then the result is converted to decimal system.
+
+	0.2 + 0.4 === 0.6		// this is false.
+
+why because 0.2 + 0.4 = 0.6000000000000001 , how 0.2  and 0.4 are represented in binary for doing the calculation then the result is covereted to decimal system.
+
+	0.2.toString(2)	 = "0.001100110011001100110011001100110011001100110011001101"
+
+	0.4.toString(2)  =  "0.01100110011001100110011001100110011001100110011001101"
+
+
+To check the imperfect number
+
+	0.2.toFixed(20)	 =  "0.200000000000000000110"
+
+One way around is using toPrecision().
+
+https://modernweb.com/what-every-javascript-developer-should-know-about-floating-points/
+
+BigInt can be used to store large integer value. its is represented with n like 1523423423423n
+
+1/0 is infinity, and there is a Infinity value in javascript.
+
+	Number.isFinite(10) 		// returns true
+
+	Number.isFinite(Infinity)	// returns false
+
+Math methods
+
+	Math.random()		// gives a random number between 0 and 1
+
+	Math.abs()			// gives absolute value like -5 returns 5.
+
+	Math.PI()			// returns PI
+
+	Math.pow()			// gives power to a value
+
+	
+--------------------------------------------------------------------------------------
+ Regular Exprsssion
+--------------------------------------------------------------------------------------
+
+we can use the new Regex() object notation or the string notation like //.
+
+suppose to match fro an email address we can do below:
+
+	const regex = /^\S+@\S+\.\S+$/;
+
+	console.log(regex.test('sanjeev.sahoo@tatatechnologies.com'));	// logs true
+
+	console.log(regex.test('sa@com'));		// logs false
+
+here ^ means starts with, and $ means ends with,
+\S means any word, and + means and
+\. means escape .
+
+The complete regex should be between / /
+
+so in the regex we are checking the string should start with any word, then @ and then any word then . and then any word.
+
+	const regex = /(h|H)ello/;
+
+	console.log(regex.test('hello'));	// true
+	console.log(regex.test('Hello'));	// true
+	console.log(regex.test('hi Hello'));	// true
+	console.log(regex.test('Hello hi'));	// true
+	console.log(regex.test('bello'));	// false
+
+we can also use exec
+
+	regex.exec('hello');		// this also gives a result object
+
+	'some text'.match(regex)	// this way we can test any string the given regex.
+
+--------------------------------------------------------------------------------------
+ Promise Object
+--------------------------------------------------------------------------------------
+
+Promise helps resolve the callback hell, ie. the nested callback issue. In case the nesting is deep.
+
+The Promise way of writing helps make the code more readble.
+
+	const promise = new Promise((resolve, reject)=>{
+		let result = 0;
+		for(let i=0; i<10000000000; i++){
+			result++;
+		}
+		resolve(result);
+	});
+
+	promise .then((data)=>{
+				console.log('first one'); 
+				let result = 0;
+				for(let i=0; i<10000000000; i++){
+					result++;
+				}
+				return data;
+			})
+			.then((data)=>{
+				console.log('second one', data);
+			});
+
+In above code there is a long running script which takes a second or two. now the result is only logged after the task has been done.
+
+This is more useful in case of chaining multiple then.
+
+whenever promise is created , it must return ethier resolve or reject after the long running task finishes.
+
+we can use the reject() function to return error object of the promise .
+
+we can then  use .catch() outside the promise with the .then() chain, the catch() handles all the error occured in the promise .then() chain before this catch is written in the code. any code after the catch chain is not handled.
+
+in case catch() is in middle of a chain all previous then is skipped but the below then are executed
+
+The different promise states:
+
+	PENDING => Promise is doing work, neither then() nor catch() executes at this moment
+
+	RESOLVED => Promise is resolved => then() executes
+
+	REJECTED  => Promise was rejected => catch() executes
+
+When you have another then() block after a catch() or then() block, the promise re-enters PENDING mode (keep in mind: then() and catch() always return a new promise - either not resolving to anything or resolving to what you return inside of then()). Only if there are no more then() blocks left, it enters a new, final mode: SETTLED.
+
+Once SETTLED, you can use a special block - finally() - to do final cleanup work. finally() is reached no matter if you resolved or rejected before.
+
+	somePromiseCreatingCode()
+		.then(firstResult => {
+			return 'done with first promise';
+		})
+		.catch(err => {
+			// would handle any errors thrown before
+			// implicitly returns a new promise - just like then()
+		})
+		.finally(() => {
+			// the promise is settled now - finally() will NOT return a new promise!
+			// you can do final cleanup work here
+		});
+
+
+--------------------------------------------------------------------------------------
+ Promise Object - async/await
+--------------------------------------------------------------------------------------
+
+using async / await is even more easier, it shortens the code a lot
+
+By using async keyword in front of function we can make it return a resolved promise object. It is equivalent to passing it through an new Promise() constructor function.
+
+	async function f() {
+		return 1;
+	}
+
+	f().then(alert); // 1
+
+The above will work as a promise function work.
+
+await can be used while calling an promise, such that it waits for the promise to resolve before executing the next code. await can only be used inside the function with async prepended to it.
+
+await literally makes JavaScript wait until the promise settles, and then go on with the result. That doesn’t cost any CPU resources, because the engine can do other jobs meanwhile: execute other scripts, handle events etc.
+
+It’s just a more elegant syntax of getting the promise result than promise.then, easier to read and write.
+
+	async function showAvatar() {
+
+		// read our JSON
+		let response = await fetch('/article/promise-chaining/user.json');
+		let user = await response.json();
+
+		// read github user
+		let githubResponse = await fetch(`https://api.github.com/users/${user.name}`);
+		let githubUser = await githubResponse.json();
+
+		// show the avatar
+		let img = document.createElement('img');
+		img.src = githubUser.avatar_url;
+		img.className = "promise-avatar-example";
+		document.body.append(img);
+
+		// wait 3 seconds
+		await new Promise((resolve, reject) => setTimeout(resolve, 3000));
+
+		img.remove();
+
+		return githubUser;
+	}
+
+	showAvatar();
+
+Error handling in case of async/await is simple like normal try catch block.
+
+	async function f() {
+
+		try {
+			let response = await fetch('/no-user-here');
+			let user = await response.json();
+		} catch(err) {
+			// catches errors both in fetch and response.json
+			alert(err);
+		}
+	}
+
+	f();
+
+If we don’t have try..catch, then the promise generated by the call of the async function f() becomes rejected. We can append .catch to handle it:
+
+	async function f() {
+		let response = await fetch('http://no-such-url');
+	}
+
+	// f() becomes a rejected promise
+	f().catch(alert); // TypeError: failed to fetch // (*)
+
+If we forget to add .catch there, then we get an unhandled promise error (viewable in the console). 
+
+Promise.race() helps return the data of the faster promise amount the two.
+
+	Promise.race([promise1Func(), promise2Func()]).then((data)=>{
+		console.log(data);
+	});
+
+The data will contain the data of the function which finished first.
+
+We also have Promise.all() this combines all the promise passed, and returns the combined data
+
+	Promise.all([promise1Func(), promise2Func()]).then((data)=>{
+		console.log(data);
+	});
+
+The data will contains the promise object of the 2 funtions.
+
+here if one is rejected the other is not executed.
+
+In case we want to execute all and then check the status we use Promise.allSettled().
+
+	Promise.allSettled([promise1Func(), promise2Func()]).then((data)=>{
+		console.log(data);
+	});
+
+Now, both the promise will execute regardless of resolve/reject. and the resulting object will be combined as stored in the data object.
+
