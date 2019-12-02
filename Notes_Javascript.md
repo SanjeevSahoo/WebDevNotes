@@ -3108,3 +3108,67 @@ In case we want to execute all and then check the status we use Promise.allSettl
 
 Now, both the promise will execute regardless of resolve/reject. and the resulting object will be combined as stored in the data object.
 
+
+--------------------------------------------------------------------------------------
+ XMLHttpRequest and JSON Data
+--------------------------------------------------------------------------------------
+
+XMLHttpRequest is a built-in browser object that allows to make HTTP requests in JavaScript.
+
+Despite of having the word “XML” in its name, it can operate on any data, not only in XML format. We can upload/download files, track progress and much more.
+
+Right now, there’s another, more modern method fetch, that somewhat deprecates XMLHttpRequest.
+
+In modern web-development XMLHttpRequest is used for three reasons:
+
+	Historical reasons: we need to support existing scripts with XMLHttpRequest.
+	We need to support old browsers, and don’t want polyfills (e.g. to keep scripts tiny).
+	We need something that fetch can’t do yet, e.g. to track upload progress.
+
+
+	let xhr = new XMLHttpRequest();
+	xhr.open(method, URL, [async, user, password])
+	xhr.send(body);
+
+Some request methods like GET do not have a body. And some of them like POST use body to send the data to the server. We’ll see examples of that later.
+
+These three events are the most widely used:
+
+	load – when the request is complete (even if HTTP status is like 400 or 500), and the response is fully downloaded.
+	error – when the request couldn’t be made, e.g. network down or invalid URL.
+	progress – triggers periodically while the response is being downloaded, reports how much has been downloaded.
+
+We can also specify a timeout using the corresponding property:
+
+	xhr.timeout = 10000; 
+
+We can use xhr.responseType property to set the response format:
+
+	"" (default) – get as string,
+	"text" – get as string,
+	"arraybuffer" – get as ArrayBuffer (for binary data, see chapter ArrayBuffer, binary arrays),
+	"blob" – get as Blob (for binary data, see chapter Blob),
+	"document" – get as XML document (can use XPath and other XML methods),
+	"json" – get as JSON (parsed automatically).
+
+XMLHttpRequest changes between states as it progresses. The current state is accessible as xhr.readyState.
+
+	UNSENT = 0; // initial state
+	OPENED = 1; // open called
+	HEADERS_RECEIVED = 2; // response headers received
+	LOADING = 3; // response is loading (a data packed is received)
+	DONE = 4; // request complete
+
+An XMLHttpRequest object travels them in the order 0 → 1 → 2 → 3 → … → 3 → 4. State 3 repeats every time a data packet is received over the network.
+
+We can terminate the request at any time. The call to xhr.abort() does that:
+
+	xhr.abort(); // terminate the request
+
+That triggers abort event, and xhr.status becomes 0.
+
+If in the open method the third parameter async is set to false, the request is made synchronously.
+
+In other words, JavaScript execution pauses at send() and resumes when the response is received. Somewhat like alert or prompt commands.
+
+We can also use the fetch() api , which is the more modern way to work with http request.
