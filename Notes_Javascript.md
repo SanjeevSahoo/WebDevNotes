@@ -3172,3 +3172,81 @@ If in the open method the third parameter async is set to false, the request is 
 In other words, JavaScript execution pauses at send() and resumes when the response is received. Somewhat like alert or prompt commands.
 
 We can also use the fetch() api , which is the more modern way to work with http request.
+
+
+--------------------------------------------------------------------------------------
+ Third Party Library
+--------------------------------------------------------------------------------------
+
+	Lodash	-	Utility methods for Working with objects, Arrays. etc
+
+	Axios	-	Utility for working with Http Request, instead of directle using the fetch API.
+
+--------------------------------------------------------------------------------------
+ Export and Import Modules
+--------------------------------------------------------------------------------------
+
+A module is just a file. One script is one module.
+
+Modules can load each other and use special directives export and import to interchange functionality, call functions of one module from another one:
+
+	export keyword labels variables and functions that should be accessible from outside the current module.
+	import allows to import functionality from other modules.
+
+As modules support special keywords and features, we must tell the browser that a script should be treated as a module, by using the attribute <script type="module">.
+
+Modules always use strict, by default. E.g. assigning to an undeclared variable will give an error.
+
+Each module has its own top-level scope. In other words, top-level variables and functions from a module are not seen in other scripts.
+
+Modules are expected to export what they want to be accessible from outside and import what they need.
+
+If the same module is imported into multiple other places, its code is executed only the first time, then exports are given to all importers.
+
+To export a function or propery use as below
+
+	export let admin = { };
+
+	export function sayHi() {
+		alert(`Ready to serve, ${admin.name}!`);
+	}
+
+And to use it in another file use
+
+	import {admin} from './admin.js';
+	admin.name = "Pete";
+
+or use 
+
+	import {admin, sayHi} from './admin.js';
+
+	alert(admin.name); // Pete
+
+	sayHi(); // Ready to serve, Pete!
+
+or use
+
+	import * as alldata from './admin.js';
+
+In above we used the named export. we can also have default export
+
+	export default class {
+		constructor(name, type){
+			this.name = name;
+			this.type = type;
+		}
+	}
+
+we can then  export like
+
+	import Animal as '.somefile.js';
+
+and in some other place
+
+	import SomeAnimal as '.somefile.js';
+
+so the name depends upon us in the default export.
+
+we can also have dnamic imports, like on a click of a button. This helps makes the initial file load fast.
+
+this inside module is undefined, so globalThis is the option. globalThis points to windows
