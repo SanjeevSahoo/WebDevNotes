@@ -3250,3 +3250,298 @@ so the name depends upon us in the default export.
 we can also have dnamic imports, like on a click of a button. This helps makes the initial file load fast.
 
 this inside module is undefined, so globalThis is the option. globalThis points to windows
+
+--------------------------------------------------------------------------------------
+ Browser Storage
+--------------------------------------------------------------------------------------
+
+localStorage and sessionStorage
+
+	localStorage.setItem('useId','someid');
+
+	sessionStorage.setItem('useId','someid');
+
+	we can store only strings here. though Json data can be stored as they are strings.
+
+	This can be accessed via javascript as well as the dev tool under application tab.User can delete this data via devtools or clearing the cookie and other site data.
+
+	localStorage is similar to sessionStorage, except that data stored in localStorage has no expiration time, while data stored in sessionStorage gets cleared when the browsing session ends (i.e. when the browser is closed).
+
+	sessionStorage is not cleared in case of browser refresh, only when browser is closed it is removed.
+
+cookies
+
+	document.cookie = 'userId=somevalue';
+
+	cookies are automatically send to the server on each request.
+
+indexDB
+
+	It is more complex than the above three. we can actually store data like we store in table.
+
+These browser storage is useful when creating website to give user a better user expirience
+
+--------------------------------------------------------------------------------------
+ Browser Support
+--------------------------------------------------------------------------------------
+
+MDN		
+
+caniuse.com				https://caniuse.com/
+
+ES6 Compact Table		https://kangax.github.io/compat-table/es6/
+
+Using Feature Detection and Code Fallback
+
+	if(navigator.clipboard){
+		// do normal stuff
+	}
+	else {
+		// fallback code here
+	}
+
+Polyfills
+
+It is a third party package that adds a feature to the browser if a particular feature is not available. This helps for functions or features that can be repliacted with older features being supported. Things like fetch API etc.
+
+Using Transpilation
+
+It is used for feature which cannot be created with polyfills. Its like writing the code using the new features and then convert to an older version of the code that is well supported.
+
+	babel		
+
+we can use this  with webpack using the babel-loader and babel-core.
+
+<noscript>
+	Your browser does not support Javascript/ it is disabled.
+</noscript>
+
+The above code is displayed if javascript is disabled in user browser.
+
+While wrting scripts with module we can write script as below
+
+	<script src="somescript.js" defer type="module"></script>
+	<script src="somescript-fallback.js" nomodule ></script>
+
+if above code is written, the older browser will ignore the first file and load second fallback script
+while the modern browser will load the first one and ignore second script
+	
+--------------------------------------------------------------------------------------
+ Using Google Maps API
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Symbol - Primitive Datatype
+--------------------------------------------------------------------------------------
+
+	const uid = Symbol();
+
+This create a unique symbol, which can be used as object key identifier. and object key identifier can be either a string or a symbol.
+
+Symbols are guaranteed to be unique. Even if we create many symbols with the same description, they are different values. The description is just a lab	el that doesn’t affect anything.
+
+For instance, here are two symbols with the same description – they are not equal:
+
+	let id1 = Symbol("id");
+	let id2 = Symbol("id");
+
+	alert(id1 == id2); // false
+
+Most values in JavaScript support implicit conversion to a string. For instance, we can alert almost any value, and it will work. Symbols are special. They don’t auto-convert.
+
+For instance, this alert will show an error:
+
+	let id = Symbol("id");
+	alert(id); // TypeError: Cannot convert a Symbol value to a string
+
+we have to explicitly call .toString()
+
+	alert(id.toString())   // this will work.
+
+--------------------------------------------------------------------------------------
+ Iterator
+--------------------------------------------------------------------------------------
+
+Iterable objects is a generalization of arrays. That’s a concept that allows to make any object useable in a for..of loop.
+
+Of course, Arrays are iterable. But there are many other built-in objects, that are iterable as well. For instance, strings are also iterable.
+
+If an object isn’t technically an array, but represents a collection (list, set) of something, then for..of is a great syntax to loop over it, so let’s see how to make it work.
+
+To make the range iterable (and thus let for..of work) we need to add a method to the object named Symbol.iterator (a special built-in symbol just for that).
+
+	When for..of starts, it calls that method once (or errors if not found). The method must return an iterator – an object with the method next.
+
+	Onward, for..of works only with that returned object.
+
+	When for..of wants the next value, it calls next() on that object.
+
+	The result of next() must have the form {done: Boolean, value: any}, where done=true means that the iteration is finished, otherwise value is the next value.
+
+	let range = {
+		from: 1,
+		to: 5,
+
+		[Symbol.iterator]() {
+			this.current = this.from;
+			return this;
+		},
+
+		next() {
+			if (this.current <= this.to) {
+			return { done: false, value: this.current++ };
+			} else {
+			return { done: true };
+			}
+		}
+	};
+
+	for (let num of range) {
+		alert(num); // 1, then 2, 3, 4, 5
+	}
+
+--------------------------------------------------------------------------------------
+ Generator
+--------------------------------------------------------------------------------------
+
+Regular functions return only one, single value (or nothing).
+
+Generators can return (“yield”) multiple values, one after another, on-demand. They work great with iterables, allowing to create data streams with ease.
+
+To create a generator, we need a special syntax construct: function*, so-called “generator function”.
+
+	function* f(…) or function *f(…)
+
+both syntax are correct. though the function* is the preffered one.
+
+	function* generateSequence() {
+	yield 1;
+	yield 2;
+	return 3;
+	}
+
+	let generator = generateSequence();
+
+	console.log(generator.next()); // {value: 1, done: false}
+	console.log(generator.next()); // {value: 2, done: false}
+	console.log(generator.next()); // {value: 3, done: true}
+	console.log(generator.next()); // {value: undefined, done: true}
+
+Generators are iterable. We can get loop over values by for..of:
+
+	for(let value of generator) {
+		alert(value); // 1, then 2
+	}
+
+for..of iteration ignores the last value, when done: true. So, if we want all results to be shown by for..of, we must return them with yield.
+
+So the iterable code can be now written using generators
+
+	let range = {
+	from: 1,
+	to: 5,
+
+	*[Symbol.iterator]() { // a shorthand for [Symbol.iterator]: function*()
+		for(let value = this.from; value <= this.to; value++) {
+		yield value;
+		}
+	}
+	};
+
+	alert( [...range] ); // 1,2,3,4,5
+
+--------------------------------------------------------------------------------------
+ Proxy and Reflect
+--------------------------------------------------------------------------------------
+
+A Proxy object wraps another object and intercepts operations, like reading/writing properties and others, optionally handling them on its own, or transparently allowing the object to handle them.
+
+	let proxy = new Proxy(target, handler)
+
+For most operations on objects, there’s a so-called “internal method” in the JavaScript specification that describes how it works at the lowest level. For instance [[Get]], the internal method to read a property, [[Set]], the internal method to write a property, and so on. These methods are only used in the specification, we can’t call them directly by name.
+
+Proxy traps intercept invocations of these methods. 
+
+	let numbers = [0, 1, 2];
+
+	numbers = new Proxy(numbers, {
+		get(target, prop) {
+			if (prop in target) {
+			return target[prop];
+			} else {
+			return 0; // default value
+			}
+		}
+	});
+
+	alert( numbers[1] ); // 1
+	alert( numbers[123] ); // 0 (no such item)
+
+Reflect is a built-in object that simplifies creation of Proxy.
+
+It was said previously that internal methods, such as [[Get]], [[Set]] and others are specification-only, they can’t be called directly.
+
+The Reflect object makes that somewhat possible. Its methods are minimal wrappers around the internal methods.
+
+For every internal method, trappable by Proxy, there’s a corresponding method in Reflect, with the same name and arguments as Proxy trap.
+
+So we can use Reflect to forward an operation to the original object.
+
+	let user = {
+		name: "John",
+	};
+
+	user = new Proxy(user, {
+		get(target, prop, receiver) {
+			alert(`GET ${prop}`);
+			return Reflect.get(target, prop, receiver); // (1)
+		},
+		set(target, prop, val, receiver) {
+			alert(`SET ${prop}=${val}`);
+			return Reflect.set(target, prop, val, receiver); // (2)
+		}
+	});
+
+	let name = user.name; // shows "GET name"
+	user.name = "Pete"; // shows "SET name=Pete"
+
+
+--------------------------------------------------------------------------------------
+ Node Rest Routes
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Using Mongo DB
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Security - Cross Origin Resource Sharing (CORS)
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Security - Cross Site Scripting Attak (XSS)
+--------------------------------------------------------------------------------------
+
+Sanitize all user inputs
+
+use textContent instead of innerHTML where ever possible
+
+--------------------------------------------------------------------------------------
+ Security - Cross Site Resource Forgery (CSRF)
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Deployment - Static Web Hosting and Dynamic Web Hosting
+--------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------
+ Performance Optimization
+--------------------------------------------------------------------------------------
+
+using the dev tool memory tab
+
+--------------------------------------------------------------------------------------
+ Testing
+--------------------------------------------------------------------------------------
+
+
