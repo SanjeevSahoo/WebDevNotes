@@ -481,6 +481,8 @@ const	-	In same scope cannot be redeclared.
 
 While declaring constant, The Variable names should be in uppercase. It is rather a reccomendation than a need. constant name can be any valid variable named seen earlier.
 
+For Contant values that are Hardcoded and are not dynamically based should be declared as UPPERCASE, constants that are based on dynamic values but doesnot change after initilization can remain in camelCase.
+
 Shadow variable / variable shadowing is when the local scope has variable with same name as in the parent scope. In such case the local scoped variables shadows the parent scoped varaible and only the local scoped variable is used.
 
 Hoisting happens for variable/object, where they are hoisted to the the top of the code block. 
