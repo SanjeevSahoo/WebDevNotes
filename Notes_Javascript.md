@@ -902,7 +902,7 @@ entries() returns a iterable object. which can be used in a for-of loops, this r
 
 values() can be used to get object with single value.
 
-	for(let id of ids.entries()){
+	for(let id of ids.values()){
 		console.log(id);
 	}
 
